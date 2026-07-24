@@ -29,6 +29,22 @@ families (Horvath1, Hannum, PhenoAge, GrimAge V1) × (original, PC). Claim 6's i
 strongest for the **original** clocks (independently coded from public coefficients, agree
 r ≈ 1.0); PC-clock agreement is partly a shared upstream (Higgins-Chen coefficients).
 
+## Evidence dimensions (coverage map)
+
+Confidence accumulates along **orthogonal** axes, not a linear experiment sequence. The project
+progresses by *filling cells*, not advancing a timeline:
+
+| Evidence dimension | Status | Established by |
+|---|---|---|
+| Software correctness | ✅ | canonical (Shrout–Fleiss) validation, self-check |
+| Statistical robustness | ✅ | M1 refutation suite (compression / LOSO / Bland–Altman / outliers) |
+| Implementation robustness | ✅ | E2 (methylCIPHER vs pyaging) |
+| Published-reference agreement | ⏳ | Tier-3 (pending) → moves claim #7 |
+| Independent reproducibility | ⏳ | external third-party rerun (pending) → moves claim #8 |
+
+Each dimension is separately strengthenable; the gaps are explicit. A "release decision" is a
+function of this coverage, not of an experiment count.
+
 ## What is NOT claimed
 - No claim beyond this dataset, platform, replicate design, or these clocks.
 - No biological / longitudinal / responsiveness claim (Tiers B–D, out of v1 scope).

@@ -55,6 +55,25 @@ scientific state.
 *Demonstrated:* M1 (Remaining-Uncertainties table), E2 (partial-independence caveat for PC
 clocks), and `CLAIMS.md` (the project's scientific-state ledger).
 
+## P7 — Scope every experiment by the claim it can change
+Reports are evidence artifacts, not endpoints; the **ledger is the endpoint**. Before an
+experiment begins it must declare *which claim(s) in `CLAIMS.md` it is capable of changing* — if
+it cannot answer that, it is not well-scoped. An experiment is "done" only when it updates a
+claim's status or scope, not when it produces a report. When new work is proposed, the first
+question is **"which claim will this change?"**, never "what analysis shall we run?"
+*Demonstrated:* the CLAIMS-as-primary-artifact model that emerged after E2 — every experiment
+maps to a specific ledger row it exists to move (Tier-3 → claim #7; independent rerun → #8).
+
+## P8 — Promote an abstraction to a contract only on independent multi-party validation
+*An interface exists because a programmer decided it should; a **contract** exists because
+independently developed systems naturally satisfy it.* Promote an internal abstraction to a
+Foundry **contract** only after **≥ 2 independent producers and ≥ 1 independent consumer** exercise
+it unchanged. Before that bar it is an architectural *hypothesis*; crossing it is *evidence* that
+the abstraction carved a real joint.
+*Demonstrated:* the **Versioned Score Table** — producers methylCIPHER + pyaging, consumer reliage
+— crossed this bar at E2 (one output-path parameter was the only downstream change). Before E2 it
+was an architectural idea; after E2 it is an evidence-backed contract.
+
 ---
 
 *These principles emerged from PIR03-C2 (reliage), Milestone 001 and Experiment E2, but are
