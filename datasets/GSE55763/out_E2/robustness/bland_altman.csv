@@ -1,0 +1,9 @@
+clock,is_pc,pair,batch_bias,sd_diff,loa_low,loa_high,r_absdiff_mean,p_absdiff_mean
+Horvath1,False,Horvath1,-0.1562,2.7481,-5.5425,5.2302,0.2196,0.1981
+PCHorvath1,True,Horvath1,0.092,1.0035,-1.8748,2.0588,0.1354,0.4312
+Hannum,False,Hannum,0.2834,1.8465,-3.3358,3.9026,0.2884,0.088
+PCHannum,True,Hannum,-0.2109,0.6781,-1.5399,1.1181,0.1024,0.5524
+PhenoAge,False,PhenoAge,-0.529,3.9519,-8.2747,7.2166,-0.1419,0.409
+PCPhenoAge,True,PhenoAge,0.0103,0.7448,-1.4494,1.47,0.1922,0.2613
+GrimAge,False,GrimAge,-0.1929,1.2704,-2.6829,2.297,0.0369,0.8309
+PCGrimAge,True,GrimAge,-0.2071,0.4552,-1.0992,0.685,-0.0374,0.8285

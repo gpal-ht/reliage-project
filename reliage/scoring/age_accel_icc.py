@@ -13,6 +13,8 @@ from reliage.benchmark import run_reliability_benchmark
 from reliage.contrast import run_paired_contrasts
 
 scores_csv, map_csv, pheno_csv = sys.argv[1], sys.argv[2], sys.argv[3]
+# optional 4th arg = output CSV path (default keeps M1 behaviour / reproduction intact)
+out_csv = sys.argv[4] if len(sys.argv) > 4 else "datasets/GSE55763/out/leaderboard_ageaccel.csv"
 wide = load_scores_wide(scores_csv)               # index=sample_id, cols=clock labels
 groups = load_map(map_csv)
 pheno = pd.read_csv(pheno_csv).set_index("sample_id")
@@ -43,6 +45,7 @@ for o in raw_ctr.index:
     print(f"{o:<12}{raw_ctr.loc[o,'variance_ratio']:>9.3f}{accel_ctr.loc[o,'variance_ratio']:>10.3f}")
 
 # write a small companion artifact (all columns the benchmark provides)
-accel_board.reset_index().round(3) \
-    .to_csv("datasets/GSE55763/out/leaderboard_ageaccel.csv", index=False)
-print("\nwrote datasets/GSE55763/out/leaderboard_ageaccel.csv | cols:", list(accel_board.columns))
+import os as _os
+_os.makedirs(_os.path.dirname(out_csv) or ".", exist_ok=True)
+accel_board.reset_index().round(3).to_csv(out_csv, index=False)
+print("\nwrote", out_csv, "| cols:", list(accel_board.columns))

@@ -48,10 +48,19 @@ confound.
 | Horvath1 | PC | `pchorvath2013` | |
 | Hannum | original | `hannum` | |
 | Hannum | PC | `pchannum` | |
-| PhenoAge | original | `phenoage` | Levine 2018; validated by score concordance |
+| PhenoAge | original | `dnamphenoage` | **DNAm Levine 2018 (513 CpGs)** — see correction below |
 | PhenoAge | PC | `pcphenoage` | |
 | GrimAge | original | `grimage` | **V1** — matches M1 (`grimage2` = V2, not used) |
 | GrimAge | PC | `pcgrimage` | |
+
+**Pre-results correction (2026-07-25):** the first pin used pyaging `phenoage`, but a
+feature-inspection before scoring revealed `phenoage` is pyaging's **clinical** PhenoAge
+(features: albumin, creatinine, glucose, …), *not* the DNAm clock. The methylation Levine
+PhenoAge (513 CpGs, matches methylCIPHER `calcPhenoAge`) is pyaging **`dnamphenoage`**. Pin
+corrected to `dnamphenoage` before any scores were produced — the "introspect, don't assume"
+discipline caught it. Feature-overlap confirmed against our betas: Horvath1 353/353,
+Hannum 71/71, DNAmPhenoAge 513/513, GrimAge(V1) 960/1032 (7% imputed ≈ M1 coverage),
+PC clocks 78,464/78,464.
 
 Notes:
 - pyaging performs its **own** preprocessing + imputation per clock (KNN/mean, quantile

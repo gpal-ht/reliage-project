@@ -1,0 +1,5 @@
+pair,noise_ratio,signal_preservation_ratio,total_var_ratio,r_age_orig,r_age_pc,std_slope_orig,std_slope_pc,subjmean_pearson,subjmean_spearman
+Horvath1,0.1333,0.762,0.7441,0.8464,0.8049,0.8464,0.8049,0.9248,0.9279
+Hannum,0.1348,0.738,0.7314,0.9289,0.8323,0.9289,0.8323,0.9339,0.9539
+PhenoAge,0.0355,0.7981,0.7655,0.8299,0.8267,0.8299,0.8267,0.9072,0.8736
+GrimAge,0.1284,0.8452,0.8412,0.8551,0.9147,0.8551,0.9147,0.9765,0.9578
