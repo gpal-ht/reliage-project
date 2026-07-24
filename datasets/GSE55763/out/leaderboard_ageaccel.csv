@@ -1,0 +1,9 @@
+clock,icc,ci_low,ci_high,band,n_subjects,k,form,sem,mean_abs_diff,mdc95
+PCPhenoAge,0.988,0.977,0.994,excellent,36,2,ICC2,0.527,0.607,1.46
+PCGrimAge,0.988,0.972,0.994,excellent,36,2,ICC2,0.322,0.385,0.892
+PCHannum,0.986,0.972,0.993,excellent,36,2,ICC2,0.479,0.513,1.329
+PCHorvath1,0.972,0.946,0.986,excellent,36,2,ICC2,0.71,0.754,1.967
+GrimAge,0.959,0.922,0.979,excellent,36,2,ICC2,0.899,1.011,2.492
+Hannum,0.853,0.731,0.922,good,36,2,ICC2,1.306,1.358,3.619
+Horvath1,0.817,0.67,0.902,good,36,2,ICC2,1.943,2.307,5.386
+PhenoAge,0.756,0.574,0.868,good,36,2,ICC2,2.794,3.212,7.745

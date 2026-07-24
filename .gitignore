@@ -24,3 +24,7 @@ reliage_out/
 *.RData
 scores*.csv
 !examples/*.csv
+
+# downloaded reference repo + stray archive
+datasets/pcclocks_example/PC-Clocks/
+*.tar.gz

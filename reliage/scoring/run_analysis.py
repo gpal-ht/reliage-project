@@ -113,7 +113,7 @@ def run(scores_csv: str, map_csv: str, out_dir: str,
         md.append(contrasts.to_string(index=False))
     for e, d in detect.items():
         md.append(f"\n## Detectability screen — effect {e}\n{d['summary']}")
-    with open(os.path.join(out_dir, "RESULTS.md"), "w") as f:
+    with open(os.path.join(out_dir, "RESULTS.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(md) + "\n")
     return report
 

@@ -16,14 +16,18 @@
 
 | Field | Value |
 |---|---|
-| Status | **Building — reliage v0.3.1, synthetic pipeline validated** |
-| Current milestone | **Real-data execution** |
-| Primary scorer | **Pinned methylCIPHER commit** (LOCKED — `SCORING_DECISION.md`) |
-| Secondary scorer | **pyaging — implementation-sensitivity check only** |
-| Completed | ICC engine + F-CIs (Shrout–Fleiss verified), within-subject SD, mean absolute difference, MDC95, **variance ratio + paired bootstrap CI**, detectability screen, **CLI/runner** (`reliage/scoring/run_analysis.py`), provenance schema |
-| Next action | **Run the PC-Clocks example fast path with pinned methylCIPHER** |
-| Following action | Rebuild the same **36-pair cohort from canonical GSE55763** GEO files |
-| Publication gate | GEO-derived results match the fast path **within prespecified tolerances** (`SCORING_DECISION.md`) |
+| Status | **First real-data result produced (GSE55763, 2026-07-24) — hypothesis SUPPORTED, 4/4 pairs** |
+| Current milestone | **Gate 3 crossed** (scientific result produced) — see `status_report_0.3.1.md` gate ladder |
+| Primary scorer | **methylCIPHER `@9e8c1e5`** (LOCKED) — installed, run; GrimAge=V1 per manifest |
+| Secondary scorer | **pyaging — implementation-sensitivity check only** (not yet run) |
+| Completed | ICC engine + F-CIs (Shrout–Fleiss verified), within-subject SD, mean absolute difference, MDC95, **variance ratio + paired bootstrap CI**, detectability screen, **CLI/runner**, provenance schema, **+ first real GSE55763 run (scores.csv, RESULTS.md, PROVENANCE.md)** |
+| Result | **PC reduces technical error, 4/4 supported.** Variance ratios (PC/original): PhenoAge 0.036, GrimAge 0.128, Horvath1 0.133, Hannum 0.135 — all CIs < 1. PC raw ICCs 0.990–0.998. |
+| Age-accel ICC | **DONE (2026-07-24):** age-acceleration ICC computed — PC 0.972–0.988, originals fall to 0.756–0.959 ("good"). **PC advantage widens** under age-accel (e.g. PhenoAge 0.756→0.988). SEM & variance ratio **invariant** (within-subject error unchanged). Matches published PC accel ~0.97. |
+| Robustness | **DONE:** compression audit (denoising not compression — noise −87–96%, signal retained 74–85%, ranking ρ 0.87–0.96), leave-one-subject-out (0/144 flips), outlier audit (cg00017157 dismissed — not a clock CpG), Bland–Altman. 5 figures. `out/ROBUSTNESS.md`. |
+| Reporting | **DONE:** `docs/PIR03-C2/TECHNICAL_REPORT_v0.1.md` (14 sections, 5 figures) + `PIPELINE.md`. |
+| Next action | **pyaging implementation-sensitivity check (2nd scorer)**; then formal Tier-3 tolerance comparison; ICC(1,1)/(3,1) sensitivity; independent rerun — THEN consider v1.0 freeze |
+| Following action | **pyaging sensitivity check** on overlapping clocks; ratify tiered reproduction gate into `SCORING_DECISION.md` |
+| Publication gate | Box fast-path unavailable → **gate redefined as tier hierarchy** (T1 reproduce published stats · T2 independent GEO rebuild ✅ · **T3 consistency within tolerances — to ratify**) |
 | Remaining v1 work | real scores; pairing audit (VAL-DATA-AUDIT); median/max abs diff + Bland–Altman LoA if not yet landed; reference comparison; RESULTS report; public CI (pytest green); **v1 protocol freeze** |
 | North Star | The open reproducible **metrology layer for aging biomarkers** (biomarker-agnostic; v1 = epigenetic clocks, technical reliability) |
 | Key docs | VISION, PROTOCOL, SCORING_DECISION, CLOCK_MANIFEST.csv, acceptance/*, STATUS_REVIEW, INPUT_OUTPUT (all under `Contributions/PIR03-C2/`) |
@@ -32,10 +36,10 @@
 
 | Field | Value |
 |---|---|
-| Evidence state | **No real-data scientific result yet** — the core hypothesis is untested by this implementation |
-| Current claims | **Software + synthetic-validation claims only** (ICC verified vs Shrout–Fleiss; variance-ratio recovery; runner joint verdict on synthetic scores) |
-| Next claim gate | Successful **PC-Clocks example** run (first real-data RESULTS.md) |
-| Public-reproduction gate | Successful **canonical GSE55763 GEO rebuild** within locked tolerances (`SCORING_DECISION.md`) |
+| Evidence state | **First real-data result (GSE55763, 2026-07-24):** PC-transformed clocks reduce technical measurement error vs originals on an independent GEO rebuild (36 pairs) — joint verdict **supported (4/4)**, all variance-ratio CIs < 1. **Raw-age ICC only.** |
+| Current claims | **First real finding + software/synthetic validation.** Result strikingly consistent with published Higgins-Chen figures (PC raw ICC ≥ 0.99; mean abs diff ~ published). **NOT yet a ratified public-reproduction claim** — Tier-3 tolerance check + age-acceleration ICC pending. |
+| Next claim gate | **Formal Tier-3 consistency check** (rebuilt cohort vs published, prespecified tolerances) + age-acceleration ICC + ICC(1,1)/(3,1) sensitivity |
+| Public-reproduction gate | GSE55763 GEO rebuild **done ✅**; **Tier-3 tolerance ratification pending** (gate redefined — Box fast-path gone; see `status_report_0.3.1.md`) |
 
 **Architecture note:** reliage is **scorer-agnostic** — it consumes a versioned score table + replicate map, so it depends on *neither* a methylation pipeline *nor* ComputAgeBench. (Earlier notes calling it "a companion package that depends on ComputAgeBench" are superseded; ComputAgeBench is no longer a dependency. methylCIPHER produces the v1 scores.)
 

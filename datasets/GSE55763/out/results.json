@@ -1,0 +1,219 @@
+{
+  "n_clocks": 8,
+  "n_pairs_evaluated": 4,
+  "pairs_improving_direction": 4,
+  "joint_primary_verdict": "supported",
+  "per_pair_verdicts": {
+    "supported": 4
+  },
+  "detectability": {
+    "1.0": {
+      "summary": "Not ruled out by measurement noise for: PCGrimAge (effect 1.0)",
+      "table": [
+        {
+          "clock": "PCGrimAge",
+          "sem": 0.32184278719506165,
+          "expected_effect": 1.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 0.892086299225991
+        },
+        {
+          "clock": "PCHannum",
+          "sem": 0.4794627961841777,
+          "expected_effect": 1.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 1.328978645730084
+        },
+        {
+          "clock": "PCPhenoAge",
+          "sem": 0.5266183216350238,
+          "expected_effect": 1.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 1.4596846918531763
+        },
+        {
+          "clock": "PCHorvath1",
+          "sem": 0.7095509884350639,
+          "expected_effect": 1.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 1.9667388568864985
+        },
+        {
+          "clock": "GrimAge",
+          "sem": 0.8991650545292369,
+          "expected_effect": 1.0,
+          "verdict": "not_detectable",
+          "symbol": "\u274c",
+          "threshold": 2.492312575587312
+        },
+        {
+          "clock": "Hannum",
+          "sem": 1.3057063125807347,
+          "expected_effect": 1.0,
+          "verdict": "not_detectable",
+          "symbol": "\u274c",
+          "threshold": 3.6191667441663125
+        },
+        {
+          "clock": "Horvath1",
+          "sem": 1.9432213487742116,
+          "expected_effect": 1.0,
+          "verdict": "not_detectable",
+          "symbol": "\u274c",
+          "threshold": 5.386235797648238
+        },
+        {
+          "clock": "PhenoAge",
+          "sem": 2.79430093830197,
+          "expected_effect": 1.0,
+          "verdict": "not_detectable",
+          "symbol": "\u274c",
+          "threshold": 7.745264713553188
+        }
+      ]
+    },
+    "2.0": {
+      "summary": "Not ruled out by measurement noise for: PCGrimAge, PCHannum, PCPhenoAge, PCHorvath1 (effect 2.0)",
+      "table": [
+        {
+          "clock": "PCGrimAge",
+          "sem": 0.32184278719506165,
+          "expected_effect": 2.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 0.892086299225991
+        },
+        {
+          "clock": "PCHannum",
+          "sem": 0.4794627961841777,
+          "expected_effect": 2.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 1.328978645730084
+        },
+        {
+          "clock": "PCPhenoAge",
+          "sem": 0.5266183216350238,
+          "expected_effect": 2.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 1.4596846918531763
+        },
+        {
+          "clock": "PCHorvath1",
+          "sem": 0.7095509884350639,
+          "expected_effect": 2.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 1.9667388568864985
+        },
+        {
+          "clock": "GrimAge",
+          "sem": 0.8991650545292369,
+          "expected_effect": 2.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 2.492312575587312
+        },
+        {
+          "clock": "Hannum",
+          "sem": 1.3057063125807347,
+          "expected_effect": 2.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 3.6191667441663125
+        },
+        {
+          "clock": "Horvath1",
+          "sem": 1.9432213487742116,
+          "expected_effect": 2.0,
+          "verdict": "not_detectable",
+          "symbol": "\u274c",
+          "threshold": 5.386235797648238
+        },
+        {
+          "clock": "PhenoAge",
+          "sem": 2.79430093830197,
+          "expected_effect": 2.0,
+          "verdict": "not_detectable",
+          "symbol": "\u274c",
+          "threshold": 7.745264713553188
+        }
+      ]
+    },
+    "5.0": {
+      "summary": "Not ruled out by measurement noise for: PCGrimAge, PCHannum, PCPhenoAge, PCHorvath1, GrimAge, Hannum (effect 5.0)",
+      "table": [
+        {
+          "clock": "PCGrimAge",
+          "sem": 0.32184278719506165,
+          "expected_effect": 5.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 0.892086299225991
+        },
+        {
+          "clock": "PCHannum",
+          "sem": 0.4794627961841777,
+          "expected_effect": 5.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 1.328978645730084
+        },
+        {
+          "clock": "PCPhenoAge",
+          "sem": 0.5266183216350238,
+          "expected_effect": 5.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 1.4596846918531763
+        },
+        {
+          "clock": "PCHorvath1",
+          "sem": 0.7095509884350639,
+          "expected_effect": 5.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 1.9667388568864985
+        },
+        {
+          "clock": "GrimAge",
+          "sem": 0.8991650545292369,
+          "expected_effect": 5.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 2.492312575587312
+        },
+        {
+          "clock": "Hannum",
+          "sem": 1.3057063125807347,
+          "expected_effect": 5.0,
+          "verdict": "detectable",
+          "symbol": "\u2705",
+          "threshold": 3.6191667441663125
+        },
+        {
+          "clock": "Horvath1",
+          "sem": 1.9432213487742116,
+          "expected_effect": 5.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 5.386235797648238
+        },
+        {
+          "clock": "PhenoAge",
+          "sem": 2.79430093830197,
+          "expected_effect": 5.0,
+          "verdict": "marginal",
+          "symbol": "\u26a0\ufe0f",
+          "threshold": 7.745264713553188
+        }
+      ]
+    }
+  },
+  "note": "Detectability is an individual measurement-noise screen, not a power calculation."
+}
