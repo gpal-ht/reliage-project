@@ -6,6 +6,25 @@ with one benign GrimAge calibration offset. A "no divergence" result — and per
 that is as valuable as a "yes." The goal was truth, not confirmation; the truth here is
 robustness.
 
+## Central lesson
+
+**The most important outcome of E2 is not the final concordance table — it is that the protocol
+prevented a *false disagreement* from becoming a published claim.** The experiment proceeded
+exactly as an implementation-sensitivity study should:
+
+```
+hypothesize a difference → observe a large apparent divergence →
+do NOT conclude "the implementations disagree" → investigate the cause →
+find our own integration errors → correct them → the disagreement disappears
+```
+
+The first run showed GrimAge `r_age = 0.29` (a dramatic-looking divergence) and a PhenoAge
+feature mismatch. A weaker study would have reported "the implementations disagree." Because the
+protocol demanded *establishing the cause before concluding*, both turned out to be our own
+integration bugs — not algorithmic differences — and the apparent disagreement vanished on
+correction. The confidence in the final "robust" verdict comes precisely from having tried, and
+failed, to make a disagreement real.
+
 ## What worked
 
 1. **The Versioned Score Table as an interface — vindicated.** pyaging emitted the *identical*
