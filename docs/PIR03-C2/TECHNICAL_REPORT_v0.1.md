@@ -7,8 +7,9 @@ pending. Not a v1 freeze.
 
 > **Headline.** In 36 independently reconstructed cross-batch technical-replicate pairs
 > from GSE55763, four prespecified PC-transformed epigenetic clocks exhibited 87–96%
-> lower within-subject technical variance than their original counterparts. All
-> paired-bootstrap confidence intervals excluded no improvement, and the conclusion was
+> lower within-subject technical variance than their original counterparts (point-estimate
+> reductions; the CI-bounded worst case is ~67%, Hannum). All paired-bootstrap confidence
+> intervals excluded no improvement, and the conclusion was
 > unchanged in every leave-one-subject-out analysis. PC clocks retained 74–85% of
 > between-subject score variance and preserved chronological-age association and subject
 > ranking, indicating **selective denoising with modest — not zero — compression** of
@@ -99,8 +100,9 @@ All four pairs are **supported** — every variance-ratio CI lies entirely below
 | Horvath1 → PCHorvath1 | 0.133 | 0.065 – 0.259 | supported |
 | Hannum → PCHannum | 0.135 | 0.058 – 0.329 | supported |
 
-PC removes **87–96%** of within-subject technical variance; PhenoAge (the noisiest
-original) benefits most. Joint verdict: **supported, 4/4**.
+PC removes **87–96%** of within-subject technical variance (point estimates; the CI
+upper bounds imply a worst-case reduction near 67% for Hannum, ~74% for Horvath1);
+PhenoAge (the noisiest original) benefits most. Joint verdict: **supported, 4/4**.
 
 ![Figure 1 — variance-ratio forest plot](../../datasets/GSE55763/out/figures/1_forest.png)
 

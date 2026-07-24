@@ -58,7 +58,7 @@ f.suptitle("Per-subject technical error collapses under PC transformation", y=1.
 f.tight_layout(); f.savefig(f"{fig}/2_paired_error.png", dpi=150, bbox_inches="tight"); plt.close(f)
 
 # 3 -- Bland-Altman panels ----------------------------------------------------
-f, axes = plt.subplots(2, 4, figsize=(13, 6), sharex="col")
+f, axes = plt.subplots(2, 4, figsize=(13, 6), sharex="col", sharey="col")  # share y per clock -> PC row visibly compresses
 for col, p in enumerate(PAIRS):
     for row, name in enumerate([p, "PC"+p]):
         ax = axes[row, col]; sub = diffs[diffs.clock == name]
