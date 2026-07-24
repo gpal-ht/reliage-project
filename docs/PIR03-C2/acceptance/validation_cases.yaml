@@ -1,0 +1,60 @@
+# TOOL-VALIDATION GATE — mathematical/software correctness of reliage.
+# ALL cases must pass. Failure here means reliage is NOT validated, independently
+# of any scientific/replication result. These have deterministic right answers.
+gate: tool_validation
+must_pass: true
+
+cases:
+  - id: VAL-ICC-CANONICAL
+    what: ICC(1,1)/(2,1)/(3,1) reproduce the Shrout & Fleiss (1979) canonical worked example
+    expect: {ICC1: 0.17, ICC2: 0.29, ICC3: 0.71, tol: 0.005}
+    status: passing            # reliage.selfcheck + tests/test_icc.py
+
+  - id: VAL-ICC-CROSSIMPL
+    what: ICC point estimates match an INDEPENDENT implementation (R psych::ICC or Python pingouin) on synthetic fixtures
+    expect: agreement within 1e-6 on shared fixtures
+    status: pending
+
+  - id: VAL-CI-CROSSIMPL
+    what: ICC 95% confidence intervals match an independent implementation on fixed fixtures
+    status: pending
+
+  - id: VAL-SEM-DEF
+    what: within-subject SD == SD(pairwise differences)/sqrt(2) for k=2, and == sqrt(MSE); matches hand calc
+    status: pending            # add explicit fixture test
+
+  - id: VAL-MDC-DEF
+    what: MDC95 == 1.96 * sqrt(2) * SEM exactly
+    status: passing            # ICCResult.mdc95 property
+
+  - id: VAL-ABS-METRICS
+    what: mean / median / p95 / max absolute pair difference and Bland-Altman limits of agreement match hand calc on a fixture
+    status: pending            # metrics implemented in Milestone 1
+
+  - id: VAL-PAIRING
+    what: each replicate paired exactly once; subjects with < k complete replicates dropped deterministically; counts reported (not silent)
+    status: partial            # build_replicate_matrix drops <k; add explicit audit + reported counts
+
+  - id: VAL-ROW-ORDER
+    what: results invariant to sample/row ordering of the input
+    status: pending
+
+  - id: VAL-DETERMINISM
+    what: identical inputs produce byte-identical outputs across runs
+    status: pending
+
+  - id: VAL-UNITS
+    what: per-clock units preserved end-to-end; no aggregation across differing units (years vs PACE vs kb)
+    status: pending            # units schema is Milestone 1
+
+  - id: VAL-MISSING
+    what: missing / malformed pairs handled deterministically (documented drop-or-flag, never silent corruption)
+    status: partial
+
+  - id: VAL-DATA-AUDIT-GSE55763
+    what: >
+      Executable replicate-manifest audit (NOT prose). Establish from the data: number of unique biological
+      samples; number of assay measurements; number of complete pairs; any excluded replicates; and whether the
+      PC-Clocks example RData contains ALL GEO replicates. Verifies the "36 samples measured in duplicate" claim.
+    expect: numbers derived from the data, recorded in a DATA_PROVENANCE artifact
+    status: pending_data

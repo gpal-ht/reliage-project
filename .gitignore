@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+
+# Downloaded data (fetch where the data lives; never commit) — keep scaffold + READMEs
+data/gse55763/
+data/*.parquet
+data/*.csv
+datasets/*/raw/*
+datasets/*/processed/*
+datasets/*/metadata/*
+!datasets/*/raw/.gitkeep
+!datasets/*/processed/.gitkeep
+!datasets/*/metadata/.gitkeep
+!datasets/*/README.md
+
+# Analysis outputs
+out/
+reliage_out/
+*.RData
+scores*.csv
+!examples/*.csv

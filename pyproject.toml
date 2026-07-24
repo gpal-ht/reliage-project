@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reliage"
+version = "0.1.0"
+description = "An open, reproducible test-retest reliability benchmark for epigenetic aging clocks (companion to ComputAgeBench)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Frontier Research Foundry contribution — PIR03-C2" }]
+keywords = ["epigenetic clock", "DNA methylation", "aging", "reliability", "ICC", "benchmark"]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+# Optional: compute scores from beta matrices with ComputAgeBench's open clocks.
+computage = ["computage"]
+# Optional: convenience loaders for GEO datasets.
+geo = ["GEOparse"]
+dev = ["pytest>=7"]
+
+[project.urls]
+"Anchor dataset (GSE55763)" = "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE55763"
+"ComputAgeBench" = "https://github.com/ComputationalAgingLab/ComputAge"
+
+[tool.setuptools]
+packages = ["reliage"]

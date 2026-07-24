@@ -1,0 +1,12 @@
+clock_family,variant,scorer_methylCIPHER,methylCIPHER_function,scorer_pyaging,output_unit,required_phenotype_inputs,missing_probe_behavior,verified_runs_5_samples,notes
+Horvath1,original,yes,calcHorvath1,yes (Horvath2013),years,none (age only for age-accel),methylCIPHER: imputation OFF by default; pyaging: knn/mean impute,pending_local,Horvath1 == Horvath2013 pan-tissue
+Horvath1,PC,yes,calcPCClocks->PCHorvath1,TBD (catalogue),years,none,same as above; PC uses fixed PC-CpG set,pending_local,PC set requires the CalcAllPCClocks reference object
+Hannum,original,yes,calcHannum,TBD (catalogue),years,none,as above,pending_local,
+Hannum,PC,yes,calcPCClocks->PCHannum,TBD,years,none,as above,pending_local,
+PhenoAge,original,yes,calcPhenoAge,TBD,years,none,as above,pending_local,
+PhenoAge,PC,yes,calcPCClocks->PCPhenoAge,TBD,years,none,as above,pending_local,
+GrimAge,original (V1),yes,calcGrimAgeV1,yes (GrimAge2 = V2),years,age + sex (REQUIRED),as above,pending_local,GrimAge needs age & sex; V1 vs V2 must be fixed and recorded
+GrimAge,PC,yes,calcPCClocks->PCGrimAge,yes (PCGrimAge),years,age + sex (REQUIRED),as above,pending_local,
+DunedinPACE,original,external install,devtools danbelsky/DunedinPACE,yes,PACE (years of biological change per chronological year — NOT years),none (impl-specific),impl-specific; check coverage,pending_local,UNIT DIFFERS: do not report in 'years'; no PC variant
+DNAmTL,original,yes,calcDNAmTL,TBD,telomere length (kb proxy — NOT years),none,as above,pending_local,unit is kb, not years
+DNAmTL,PC,TBD,calcPCClocks->PCDNAmTL (verify),TBD,telomere length (kb proxy),none,as above,pending_local,confirm PCDNAmTL is in the current PC set before promising the pair

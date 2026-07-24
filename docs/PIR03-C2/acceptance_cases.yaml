@@ -1,0 +1,9 @@
+# DEPRECATED — this single file mixed software validation, exact reproduction,
+# external replication, and future scientific hypotheses, which must stay separate.
+# Superseded by the three files in ./acceptance/ :
+#   acceptance/validation_cases.yaml         (tool-validation gate; must pass)
+#   acceptance/published_reference_cases.yaml (exact source anchors)
+#   acceptance/replication_hypotheses.yaml    (verdict-based external replication)
+# See acceptance/README.md for the two-gate framework and four-tier taxonomy.
+deprecated: true
+superseded_by: acceptance/

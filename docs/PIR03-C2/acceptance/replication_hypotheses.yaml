@@ -1,0 +1,121 @@
+# SCIENTIFIC-REPLICATION GATE — prespecified DIRECTIONAL hypotheses for open
+# public-data analysis. Verdict-based, NEVER pass-only. A "not_supported" result
+# here can come from a completely correct reliage run (that is a valid finding).
+gate: scientific_replication
+verdicts: [supported, directionally_supported, partially_supported, not_supported, inconclusive]
+
+primary_endpoint:
+  metric: within_subject_variance_ratio        # var_within(PC) / var_within(original)
+  favors_pc_if: "< 1"
+  rationale: >
+    Directly tests the PC mechanism (reduced technical-noise sensitivity) and is
+    less dependent on between-person spread than ICC. Report ICC + CI ALONGSIDE it.
+
+# Four-tier taxonomy (cleaner than lumping all non-technical repeats as "biological")
+tier_taxonomy:
+  A: "same material, repeated assay (technical)          -> GSE55763"
+  B: "repeat draw, short interval, stable conditions      -> E-MTAB-4664 normal-sleep arm (caveated)"
+  C: "longitudinal repeat measurement                     -> SATSA E-MTAB-7309"
+  D: "acute perturbation responsiveness                   -> E-MTAB-4664 sleep-dep arm"
+
+milestone_label: "Open EXTERNAL REPLICATION of the PC-clock technical-reliability advantage on GSE55763"
+# (Reserve 'exact reproduction' for same-data/same-method/same-numbers, only after
+#  confirming Higgins-Chen computed the cited figures from this same Lehne subset.)
+
+cases:
+  # --- Tier A: the primary paired contrasts (one per clean original<->PC pair) ---
+  - id: REP-TECH-001
+    tier: A
+    case_type: external_replication
+    claim: "PC-Horvath1 has lower technical measurement error than Horvath1"
+    dataset: GSE55763
+    comparison: {original: Horvath1, transformed: PCHorvath1}
+    icc_flavor: [raw_age, age_acceleration]     # report both; acceleration is the sensitive one
+    primary_metric: within_subject_variance_ratio
+    expected_direction: less_than_1
+    secondary_metrics: [delta_icc, mean_absolute_pair_difference, bland_altman_width]
+    decision:
+      supported: ["primary_point_estimate < 1", "bootstrap_ci excludes 1"]
+      directionally_supported: ["primary_point_estimate < 1", "bootstrap_ci includes 1"]
+      not_supported: ["primary_point_estimate >= 1"]
+    limitations: [technical_replicates_only, small_sample_36_pairs, cross_batch_by_design]
+    source: {paper: "Higgins-Chen 2022", figure: pending_verification}
+  - id: REP-TECH-002
+    tier: A
+    case_type: external_replication
+    claim: "PC-Hannum has lower technical measurement error than Hannum"
+    dataset: GSE55763
+    comparison: {original: Hannum, transformed: PCHannum}
+    primary_metric: within_subject_variance_ratio
+    expected_direction: less_than_1
+    decision: {supported: ["ratio < 1", "ci excludes 1"], directionally_supported: ["ratio < 1", "ci includes 1"], not_supported: ["ratio >= 1"]}
+    source: {paper: "Higgins-Chen 2022", figure: pending_verification}
+  - id: REP-TECH-003
+    tier: A
+    case_type: external_replication
+    claim: "PC-PhenoAge has lower technical measurement error than PhenoAge"
+    dataset: GSE55763
+    comparison: {original: PhenoAge, transformed: PCPhenoAge}
+    primary_metric: within_subject_variance_ratio
+    expected_direction: less_than_1
+    decision: {supported: ["ratio < 1", "ci excludes 1"], directionally_supported: ["ratio < 1", "ci includes 1"], not_supported: ["ratio >= 1"]}
+    source: {paper: "Higgins-Chen 2022", figure: pending_verification}
+  - id: REP-TECH-004
+    tier: A
+    case_type: external_replication
+    claim: "PC-GrimAge has lower technical measurement error than GrimAge"
+    dataset: GSE55763
+    comparison: {original: GrimAge, transformed: PCGrimAge}
+    note: "GrimAge requires age + sex inputs; fix and record V1 vs V2"
+    primary_metric: within_subject_variance_ratio
+    expected_direction: less_than_1
+    decision: {supported: ["ratio < 1", "ci excludes 1"], directionally_supported: ["ratio < 1", "ci includes 1"], not_supported: ["ratio >= 1"]}
+    source: {paper: "Higgins-Chen 2022", figure: pending_verification}
+
+  - id: REP-TECH-JOINT
+    tier: A
+    case_type: external_replication
+    claim: "Across prespecified pairs, PC transformation generally reduces technical error"
+    metric: fraction_of_pairs_with_variance_ratio_lt_1
+    verdict_rule: >
+      supported if MOST pairs improve AND joint uncertainty is compatible with the
+      published advantage; partially_supported if mixed; not_supported if absent/reversed;
+      inconclusive if precision/coverage prevents a decision.
+
+  # A1 restated as DESCRIPTIVE (not a mandatory per-clock gate)
+  - id: REP-TECH-PCEXCELLENT
+    tier: A
+    case_type: descriptive_replication
+    claim: "prespecified PC clocks reach 'excellent' technical reliability"
+    decision_rule:
+      primary: report_point_estimate_and_ci
+      supportive_if: ["point_estimate >= 0.90"]
+      not_automatic_failure_if: ["ci_crosses_threshold", "valid_pairs < 40", "restricted_between_person_range", "preprocessing_differences"]
+
+  # --- Tiers B/C/D: FUTURE hypotheses, require additional datasets/scores ---
+  - id: REP-STABILITY-B
+    tier: B
+    status: future_requires_dataset
+    claim: "under nominally stable short-interval repeat draws, clock X remains stable"
+    dataset: "E-MTAB-4664 (normal-sleep arm only)"
+    caveat: "circadian/collection/cell-composition still vary; NOT a universal biological reliability coefficient"
+  - id: REP-RESPONSIVENESS-D
+    tier: D
+    status: future_requires_dataset
+    claim: "clock X moves after acute perturbation (sleep deprivation)"
+    note: "this is RESPONSIVENESS, not unreliability; a real biological shift lowers absolute-agreement ICC legitimately — the statistic detects disagreement, not its cause"
+  - id: REP-TB-DECOUPLING
+    tier: cross
+    status: future_requires_two_datasets
+    claim: "a clock's technical and biological reliability are weakly correlated"
+    decision: "report correlation + CI on new public data; do NOT assert near-zero as mandatory"
+  - id: REP-BIO-DIST-EXTERNAL
+    tier: "B/C"
+    status: future
+    claim: "report the OBSERVED biological reliability distribution on new data"
+    rule: "a clock exceeding 0.90 must be surfaced, never failed"
+  - id: REP-LONGITUDINAL-C
+    tier: C
+    status: future_requires_dataset
+    claim: "over longitudinal intervals, clock trajectories reflect real aging + health change, not reliability"
+    note: "SATSA (E-MTAB-7309) is longitudinal by design — different question from technical/biological repeatability"

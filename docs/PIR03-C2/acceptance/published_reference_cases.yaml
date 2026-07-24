@@ -1,0 +1,61 @@
+# PUBLISHED REFERENCE ANCHORS — exact source results.
+# Reproducible ONLY under the source study's dataset, clock set, preprocessing and
+# ICC specification. These are NOT targets to assert on new/different data.
+purpose: exact_or_partial_reproduction_anchors
+
+cases:
+  - id: REF-HC2022-ICC
+    source: {paper: "Higgins-Chen et al. 2022, Nature Aging", location: "results text; figure ref pending exact citation"}
+    reproducible_only_with:
+      dataset: "source Lehne technical-replicate subset"
+      clock_set: "the 6 clocks as implemented in the source"
+      preprocessing: "source pipeline"
+      icc_form: "as specified in source"
+    important: >
+      ICC is reported in TWO flavors that differ substantially — raw predicted age
+      vs age-acceleration (age-adjusted). Record which flavor when comparing.
+    values:                       # extracted from results text; confirm against the figure/table
+      Horvath1: {icc_raw_original: 0.945, icc_raw_pc: ">0.99", icc_accel_original: 0.817, icc_accel_pc: 0.97}
+      Hannum:   {icc_raw_pc: ">0.99", icc_accel_pc: 0.97}
+      PhenoAge: {icc_raw_pc: ">0.99", icc_accel_pc: 0.97}
+    status: extracted_pending_figure_confirmation
+
+  - id: REF-HC2022-ABSDIFF
+    statistic: RESOLVED
+    resolution: >
+      "deviations up to 3 to 9 years between technical replicates" == the MAXIMUM
+      absolute replicate difference (upper bound observed). Per clock the paper
+      reports MEDIAN and MAXIMUM absolute replicate difference. "PC replicates within
+      0 to 1.5 years" == the range covering the MAJORITY of PC absolute differences.
+    do_not_label_as: within_subject_sd
+    target_statistic_for_reproduction: [median_absolute_pair_difference, maximum_absolute_pair_difference]
+    values:
+      Horvath1: {median_abs_diff: 2.1, max_abs_diff: 5.4, unit: years}
+      GrimAge:  {median_abs_diff: 0.9, max_abs_diff: 2.4, unit: years}
+      others:   {median_abs_diff_range: [0.9, 2.4], max_abs_diff_range: [4.5, 8.6], unit: years}
+    source: {paper: "Higgins-Chen et al. 2022", location: "results text; figure ref pending"}
+    status: statistic_resolved
+
+  - id: REF-TB-CORR
+    value: {technical_vs_biological_reliability_correlation: 0.0168}
+    reproduction_test: "feed the published per-clock reliability table into reliage and recover r = 0.0168"
+    do_not_assert_on_new_data: true
+    caveat: "clock estimates are not independent (shared CpGs/training/families); the correlation itself is uncertain with only a few dozen clocks"
+    source: {paper: "reliability paper 2025"}
+
+  - id: REF-PCGRIMAGE-BIO
+    value: {pcgrimage_biological_icc: 0.76, rank: 1}
+    reproducible_only_with: {dataset: source, clock_set: source, preprocessing: source}
+    never: "universal ranking assertion — report rank INTERVALS on new data; 'ranks first' is fragile when CIs overlap"
+    source: {paper: "reliability paper 2025"}
+
+  - id: REF-BIO-DIST
+    description: "biological reliability distribution IN THE REFERENCE STUDY: most clocks ICC ~0.4-0.7, none 'excellent'"
+    is_not: "a universal ceiling — a new dataset may legitimately exceed 0.90; the tool must surface it, not fail it"
+    source: {paper: "reliability paper 2025"}
+
+  - id: REF-KOOLI-BANDS
+    thresholds: {poor: "<0.50", moderate: "0.50-0.75", good: "0.75-0.90", excellent: ">=0.90"}
+    boundary_convention: "0.90 -> 'excellent' (>= inclusive); documented in reliage.icc.koo_li_band"
+    report_with: "CI-compatible band range, not only the point-estimate band"
+    source: {paper: "Koo & Li 2016"}
