@@ -2,7 +2,12 @@
 
 **Contribution:** `reliage` — an open, reproducible test-retest reliability benchmark for epigenetic aging clocks.
 **Source:** Project Intelligence Report 0003 ("Can We Measure Aging?"), Project 2 — a test-retest reliability harness.
-**Status:** Build started, `reliage` v0.1.0 working and verified. Distribution not yet executed.
+> ⚠ **SUPERSEDED — historical v0.1.0 planning notes; retained for provenance, not current.**
+> Current state: Milestone 001 (frozen `v0.3.1-scientific-baseline`) + Experiment E2 complete.
+> Canonical now: [`../tracker.md`](../tracker.md) · [`CLAIMS.md`](CLAIMS.md) · [`../HANDOVER_v0.3.1.md`](../HANDOVER_v0.3.1.md).
+> The "Not yet" items below (within-subject error, MDC95, real-data GSE55763 run) are all done.
+
+**Status (v0.1.0, historical):** Build started, `reliage` v0.1.0 working and verified. Distribution not yet executed.
 
 ---
 

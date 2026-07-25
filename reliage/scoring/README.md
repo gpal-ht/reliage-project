@@ -12,18 +12,25 @@ python -m reliage.scoring.run_analysis  scores_methylCIPHER.csv  map.csv  --out 
 - Produces `out/leaderboard.csv`, `out/contrasts.csv` (the primary variance-ratio
   endpoint), `out/results.json`, `out/RESULTS.md`.
 
-## Sensitivity path (pyaging, independent check)
-Score the overlapping clocks with pyaging, then compare score-for-score against
-methylCIPHER: do implementations agree numerically? same reliability ranking? same
-variance-ratio verdict? If not — coefficients, preprocessing, missing-CpG handling,
-transformations, or units? (Advisory, not a gate; a verdict flip must be explained.)
+## Sensitivity path (pyaging, independent check) — RUN in Experiment E2
+```bash
+# pyaging needs Python <3.14 → isolated env (see HANDOVER_v0.3.1 §12); betas.csv is the same file.
+<py3.13-env>/python  score_pyaging.py  betas.csv  pheno.csv  scores_pyaging.csv
+python -m reliage.scoring.run_analysis  scores_pyaging.csv  map.csv  --out out_E2/
+```
+E2 result: **implementation-robust** — pyaging reproduces methylCIPHER (per-sample scores
+r ≥ 0.9997, same verdict), one benign GrimAge calibration offset. Full comparison:
+`docs/PIR03-C2/IMPLEMENTATION_COMPARISON.md`. (Advisory sensitivity check, not a gate; a verdict
+flip must be explained. Clock-definition matching is the hard part — e.g. pyaging `dnamphenoage`,
+not `phenoage`; GrimAge reads age/female as features.)
 
-## Execution order (per SCORING_DECISION.md)
-1. Fast path: `pcclocks_example` RData → score → analyze → compare to published refs.
-2. Canonical: rebuild the same cohort from GSE55763 GEO files → score → analyze.
-3. Claim public reproduction ONLY when GEO result matches fast path within the
-   prespecified tolerances in `SCORING_DECISION.md`.
-4. Run pyaging sensitivity check.
+## Status (canonical: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`)
+- **M1 done** — GSE55763 GEO cohort (36 replicate pairs) scored with pinned methylCIPHER →
+  supported 4/4. **The author-prepared "fast path" (Box `Example_PCClock_Data.RData`) is
+  UNAVAILABLE (removed); M1 used the GEO canonical path directly.**
+- **E2 done** — pyaging sensitivity check → implementation-robust.
+- **Pending** — formal Tier-3 published-reference comparison. The fast-path↔GEO tolerance gate in
+  `SCORING_DECISION.md` is superseded by a tiered reproduction gate, to be ratified at Tier-3.
 
 ## The score table contract (long form)
 `sample_id, clock_id, variant, score, unit, implementation, repo_url, commit,

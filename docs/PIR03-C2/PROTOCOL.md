@@ -112,6 +112,9 @@ reaches 0.90, every original sits at 0.7–0.8, etc., are *findings*, not gates.
 
 ## 5. Provenance & reproducibility staging
 
+> ⚠ **Update (2026-07):** the fast-path example RData is **unavailable (Box link removed)**; M1 used
+> the GEO full path directly. See `SCORING_DECISION.md` (gate superseded by a tiered gate, ratify at Tier-3).
+
 - **Fast path** (debug/validate): PC-Clocks `Example_PCClock_Data.RData` (Lehne
   technical-replicate subset). Convenience/bootstrap only — an *intermediate
   artifact prepared by the original team*, not full public reproduction.

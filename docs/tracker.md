@@ -29,7 +29,7 @@
 | Next action | **formal Tier-3 tolerance comparison; independent third-party rerun; ICC(1,1)/(3,1) sensitivity** — THEN consider v1.0 freeze (E2 done) |
 | Following action | after Tier-3: ratify tiered reproduction gate into `SCORING_DECISION.md`; consider Versioned Score Table v1.0 spec freeze (`VST_DESIGN_NOTES.md`) |
 | Publication gate | Box fast-path unavailable → **gate redefined as tier hierarchy** (T1 reproduce published stats · T2 independent GEO rebuild ✅ · **T3 consistency within tolerances — to ratify**) |
-| Remaining v1 work | real scores; pairing audit (VAL-DATA-AUDIT); median/max abs diff + Bland–Altman LoA if not yet landed; reference comparison; RESULTS report; public CI (pytest green); **v1 protocol freeze** |
+| Remaining v1 work | **Tier-3 reference comparison; independent third-party rerun; ICC(1,1)/(3,1) sensitivity; public CI (pytest green); v1 protocol + Versioned Score Table spec freeze.** _(Done: real scores, pairing audit, abs-diff + Bland–Altman LoA, RESULTS/technical report, robustness, E2.)_ |
 | North Star | The open reproducible **metrology layer for aging biomarkers** (biomarker-agnostic; v1 = epigenetic clocks, technical reliability) |
 | Key docs | VISION, PROTOCOL, SCORING_DECISION, CLOCK_MANIFEST.csv, acceptance/*, STATUS_REVIEW, INPUT_OUTPUT (all under `Contributions/PIR03-C2/`) |
 
@@ -107,7 +107,7 @@ Full competitive/prior-art landscape for reliability benchmarking:
 
 | ID | Title | Source | Debt class | Effort | Rationale |
 |---|---|---|---|---|---|
-| PIR03-C2 | Reliability-benchmarking module (`reliage`) | PIR 0003 (Ch25, Project 2) | Measurement | ~3–5wk | **Sole Now item** — v0.3.1, synthetic pipeline validated; at real-data execution (see Current State). Depth over breadth: nothing else is "Now" until reliage hits v1 freeze or is explicitly paused. |
+| PIR03-C2 | Reliability-benchmarking module (`reliage`) | PIR 0003 (Ch25, Project 2) | Measurement | ~3–5wk | **Sole Now item** — M1 + E2 complete (supported 4/4, implementation-robust; baseline frozen `v0.3.1-scientific-baseline`); at Tier-3 / independent-rerun (see Current State). Depth over breadth: nothing else is "Now" until reliage hits v1 freeze or is explicitly paused. |
 
 ## Superseded (do not build — satisfied externally)
 

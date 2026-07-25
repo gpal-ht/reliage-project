@@ -29,11 +29,11 @@ cases:
 
   - id: VAL-ABS-METRICS
     what: mean / median / p95 / max absolute pair difference and Bland-Altman limits of agreement match hand calc on a fixture
-    status: pending            # metrics implemented in Milestone 1
+    status: partial            # implemented + run in M1 (robustness.py, leaderboard mean_abs_diff, Bland-Altman LoA); explicit hand-calc fixture test still to add
 
   - id: VAL-PAIRING
     what: each replicate paired exactly once; subjects with < k complete replicates dropped deterministically; counts reported (not silent)
-    status: partial            # build_replicate_matrix drops <k; add explicit audit + reported counts
+    status: passing            # build_replicate_matrix drops <k; parse_metadata.py audit reports counts (M1: 36 subjects, 0 malformed)
 
   - id: VAL-ROW-ORDER
     what: results invariant to sample/row ordering of the input
@@ -45,7 +45,7 @@ cases:
 
   - id: VAL-UNITS
     what: per-clock units preserved end-to-end; no aggregation across differing units (years vs PACE vs kb)
-    status: pending            # units schema is Milestone 1
+    status: partial            # unit column preserved end-to-end (all "years" in M1/E2); mixed-unit (PACE/kb) no-aggregation test still pending
 
   - id: VAL-MISSING
     what: missing / malformed pairs handled deterministically (documented drop-or-flag, never silent corruption)
@@ -57,4 +57,4 @@ cases:
       samples; number of assay measurements; number of complete pairs; any excluded replicates; and whether the
       PC-Clocks example RData contains ALL GEO replicates. Verifies the "36 samples measured in duplicate" claim.
     expect: numbers derived from the data, recorded in a DATA_PROVENANCE artifact
-    status: pending_data
+    status: passing            # M1 executable audit (parse_metadata.py): 72 measurements -> 36 subjects x 2 batches, 0 malformed; recorded in metadata/{pheno,map}.csv + PROVENANCE.md

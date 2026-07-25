@@ -115,11 +115,11 @@ python -m reliage.selfcheck
 
 Full test suite (needs pytest): `pytest -q`.
 
-**Acceptance target for the real-data milestone:** reproduce the published
-technical-reliability ICCs for named clocks from the reliability literature
-(e.g. PC-clocks reliable, several second-gen clocks technically reliable but
-biologically less so) on public replicate data — turning a gated result into an
-open, rerunnable one.
+**Real-data milestone — ACHIEVED (Milestone 001, frozen tag `v0.3.1-scientific-baseline`):** on
+public GSE55763 replicate data (36 cross-batch technical-replicate pairs), PC-transformed clocks
+reduce within-subject technical variance vs their originals (supported 4/4), turning a gated result
+into an open, rerunnable one — and the conclusion is **implementation-robust** (Experiment E2).
+Canonical status: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`; full handover `docs/HANDOVER_v0.3.1.md`.
 
 ---
 
@@ -129,10 +129,14 @@ open, rerunnable one.
 - [x] Score-based reliability benchmark + leaderboard
 - [x] Synthetic generator with known ICCs (end-to-end verification)
 - [x] GSE55763 loader path + generic replicate-group builder
-- [ ] Run on downloaded GSE55763 with ComputAgeBench clocks (real-data acceptance)
-- [ ] Add SATSA (E-MTAB-7309) and an EPIC-array replicate set
-- [ ] Biological-reliability mode (within-subject short-interval replicates)
-- [ ] Publish leaderboard; propose upstreaming to ComputAgeBench
+- [x] **Real-data run on GSE55763 with pinned methylCIPHER — supported 4/4 (M1)** — scorer is methylCIPHER, not ComputAgeBench (accuracy-only; not a dependency)
+- [x] **Robustness suite: compression audit, LOSO, Bland–Altman, outliers — selective denoising (M1)**
+- [x] **Implementation-robustness check vs pyaging — robust (E2)**
+- [ ] Tier-3 formal published-reference comparison
+- [ ] Independent third-party rerun
+- [ ] Add SATSA (E-MTAB-7309) and an EPIC-array replicate set (v2)
+- [ ] Biological-reliability mode (within-subject short-interval replicates) (v2)
+- [ ] v1.0 release (after Tier-3 + independent rerun) + Versioned Score Table spec freeze
 
 ## References
 

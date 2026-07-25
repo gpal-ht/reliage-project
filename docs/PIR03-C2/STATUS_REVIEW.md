@@ -1,5 +1,10 @@
 # reliage — Engineering Status Review
 
+> ⚠ **SUPERSEDED — point-in-time review at reliage v0.2.1 (pre-real-data); retained for history, not current.**
+> Current state: Milestone 001 (frozen `v0.3.1-scientific-baseline`) + Experiment E2 complete —
+> canonical: [`../tracker.md`](../tracker.md) · [`CLAIMS.md`](CLAIMS.md) · [`../HANDOVER_v0.3.1.md`](../HANDOVER_v0.3.1.md).
+> Statements below (e.g. "variance ratio not started", "no real data scored") reflect v0.2.1 only.
+
 _Contribution PIR03-C2 (Frontier Research Foundry). Status as of this session:
 reliage v0.2.1, protocol locked, acceptance spec restructured, no real data scored yet._
 

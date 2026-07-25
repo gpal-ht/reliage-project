@@ -1,5 +1,10 @@
 # PIR03-C2 — Plan: Test on Public Data, Present Findings, Represent Output
 
+> ⚠ **Largely EXECUTED / partly superseded — historical plan; not current status.** The plan below
+> was carried out in Milestone 001 + Experiment E2. Note: the "fast path" (Box `Example_PCClock_Data.RData`)
+> is **unavailable (removed)**; M1 used the GEO canonical path directly. Canonical status:
+> [`../tracker.md`](../tracker.md) · [`CLAIMS.md`](CLAIMS.md) · results in [`TECHNICAL_REPORT_v0.1.md`](TECHNICAL_REPORT_v0.1.md), [`IMPLEMENTATION_COMPARISON.md`](IMPLEMENTATION_COMPARISON.md).
+
 TranslAGE is dropped as a target (gated, not reproducible). The acceptance goal
 is now clean and self-contained:
 

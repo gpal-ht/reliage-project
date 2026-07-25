@@ -20,34 +20,40 @@ originals on **independently rebuilt public replicate data**, and **what effect 
 exceed each clock's technical measurement-noise floor**? (Not trial detectability;
 not biological/longitudinal/responsiveness — those are Tiers B/C/D, out of v1 scope.)
 
-## Current state (as handed off)
+## Current state
 
-- **reliage v0.3.x**, synthetic pipeline validated. **Milestone: real-data execution.**
-- **Evidence state: NO real-data scientific result yet** — the core hypothesis is
-  untested by this implementation. Current claims are **software + synthetic-validation
-  only**.
-- **Scorer LOCKED** (`docs/PIR03-C2/SCORING_DECISION.md`): **methylCIPHER (R) = pinned
-  primary**; **pyaging (Python) = implementation-sensitivity check only.**
+Canonical "what is true now": **`docs/tracker.md` Current State block** + the evidence ledger
+**`docs/PIR03-C2/CLAIMS.md`**. Full engineering + scientific handover: **`docs/HANDOVER_v0.3.1.md`**.
 
-## The immediate next task (do this, don't add architecture)
+- **Milestone 001 complete and FROZEN** at git tag `v0.3.1-scientific-baseline` (commit `61cacf0`):
+  first real-data result on GSE55763 (36 cross-batch technical-replicate pairs) — PC clocks reduce
+  within-subject technical variance, **supported 4/4** (all bootstrap CIs < 1), robustness-hardened
+  (**selective denoising**, not compression).
+- **Experiment E2 complete:** the conclusion is **implementation-robust** — an independent scorer
+  (pyaging) reproduces it (per-sample scores r ≥ 0.9997, same verdict); one benign GrimAge
+  calibration offset. See `IMPLEMENTATION_COMPARISON.md`.
+- **Working branch `develop`**; `master` + the tag are the immutable M1 reference. Remote
+  `github.com/gpal-ht/reliage-project`. Canonical local copy is under `C:\Ambitious Projects\...`
+  (kept off OneDrive — sync clients corrupted `.git`; keep git GUIs/sync OFF this repo).
+- **Scorer LOCKED** (`SCORING_DECISION.md`): methylCIPHER `@9e8c1e5` = pinned primary (run in M1);
+  pyaging 0.3.1 = implementation-sensitivity scorer (run in E2).
+- **Evidence dimensions:** software correctness ✅, statistical robustness ✅, implementation
+  robustness ✅; **published-reference agreement (Tier-3) ⏳ and independent reproducibility ⏳ open.**
 
-Produce the first real-data result. Further conceptual/architecture refinement has
-negative value now.
+## The next task (fill an evidence dimension — not more architecture)
 
-1. **Fast path** — score the PC-Clocks *example* replicate data with pinned
-   methylCIPHER → run reliage → compare to published references.
-2. **Canonical path** — rebuild the same 36-pair cohort from GSE55763 GEO files;
-   score with the same pinned methylCIPHER.
-3. **Do NOT claim public reproduction** until the GEO result matches the fast path
-   within the prespecified tolerances in `SCORING_DECISION.md`.
-4. Run the pyaging sensitivity check on overlapping clocks.
+Do not re-open or re-interpret M1/E2, and do not add architecture. An experiment exists to update a
+claim in `CLAIMS.md` (`FOUNDRY_PRINCIPLES.md` P7). Open dimensions, in order:
 
-```bash
-# where R + data live:
-Rscript reliage/scoring/score_methylCIPHER.R  betas.csv  pheno.csv  scores.csv   # PIN COMMIT first
-python -m reliage.scoring.run_analysis  scores.csv  map.csv  --out out/
-# -> out/leaderboard.csv, out/contrasts.csv (primary endpoint), out/results.json, out/RESULTS.md
-```
+1. **Tier-3 — published-reference agreement** (→ CLAIMS #7): lock formal tolerances on
+   *spread-independent* quantities (variance ratio, MDC95, mean/median abs diff — **not** raw ICC),
+   then compare to published Higgins-Chen figures. Its own locked protocol (`TIER3_PROTOCOL.md`).
+2. **Independent third-party rerun** (→ CLAIMS #8) from a clean environment via `PIPELINE.md`.
+
+Only after both: consider a v1.0 release + a Versioned Score Table spec freeze (`VST_DESIGN_NOTES.md`).
+Reproduction commands live in `docs/PIR03-C2/PIPELINE.md`. Known API/reproducibility pitfalls are in
+`docs/HANDOVER_v0.3.1.md §12` (methylCIPHER 0.2.0 API, pyaging Python <3.14 + clinical-vs-DNAm
+PhenoAge + GrimAge age/female-as-features).
 
 ## Non-negotiable rules (from locked protocol/reviews)
 
