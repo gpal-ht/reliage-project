@@ -16,7 +16,7 @@ evidence, at what confidence. Everything else (reports, postmortems, milestones,
 | 4 | The effect survives adversarial robustness checks | M1: compression audit, leave-one-subject-out, Bland–Altman, outliers | ✅ Supported · High | 2026-07-24 |
 | 5 | The gain is selective denoising, not range compression | M1 compression audit (noise −87–96% vs signal retained 74–85%) | ✅ Supported · High | 2026-07-24 |
 | 6 | The reliability conclusion is robust to the scoring implementation | E2 (methylCIPHER vs pyaging; r ≥ 0.9997, ICC/VR ordering ρ = 1.0, same verdict) | ✅ Supported · High — *scoped: correctly-matched clocks, GSE55763* | 2026-07-25 |
-| 7 | Results match published (Higgins-Chen) references within *formal* tolerances | Tier-3 comparison | ⏳ Pending | — |
+| 7 | Results match published (Higgins-Chen) references within *formal* tolerances | Tier-3 (same-cohort GSE55763): Horvath1 2.08/5.45 vs 2.1/5.4, GrimAge 0.93/2.41 vs 0.9/2.4 yr; Horvath1 ICC 0.945/0.817 exact; PC ICC bands all met (20/22 checks) | ✅ Supported · High — *scoped: specific published values + ICC bands met near-exactly; 2 clocks' median \|Δ\| ~0.03 yr outside a coarse range (strict rule: PARTIAL)* | 2026-07-25 |
 | 8 | Results are independently reproducible by a third party | External rerun from the repo | ⏳ Pending | — |
 | 9 | Generalizes to other datasets | — | ❔ Unknown (not tested) | — |
 | 10 | Generalizes to EPIC arrays (vs 450K) | — | ❔ Unknown (not tested) | — |
@@ -39,7 +39,7 @@ progresses by *filling cells*, not advancing a timeline:
 | Software correctness | ✅ | canonical (Shrout–Fleiss) validation, self-check |
 | Statistical robustness | ✅ | M1 refutation suite (compression / LOSO / Bland–Altman / outliers) |
 | Implementation robustness | ✅ | E2 (methylCIPHER vs pyaging) |
-| Published-reference agreement | ⏳ | Tier-3 (pending) → moves claim #7 |
+| Published-reference agreement | ✅ (scoped) | Tier-3 same-cohort reproduction — specific published figures + ICC bands met (claim #7) |
 | Independent reproducibility | ⏳ | external third-party rerun (pending) → moves claim #8 |
 
 Each dimension is separately strengthenable; the gaps are explicit. A "release decision" is a

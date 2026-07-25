@@ -52,9 +52,12 @@ columns (long form) so no result is ever unattributable.
 > ⚠ **Update (2026-07):** the **fast path** below (Box `Example_PCClock_Data.RData`) is
 > **unavailable — the Yale Box link was removed.** M1 executed the **canonical GEO path directly**
 > (step 2). The fast-path↔GEO cross-check (steps 1–3 + the tolerances below) therefore could not run
-> as written and is **superseded by a tiered reproduction gate** (T1 reproduce published stats ·
-> T2 independent GEO rebuild ✅ · T3 consistency within tolerances), to be **ratified here at Tier-3**.
-> Steps below retained as the original locked instruction. Canonical status: `../tracker.md`, `CLAIMS.md`.
+> as written and is **superseded by a tiered reproduction gate — now RATIFIED (Tier-3, 2026-07-25):**
+> **T1 reproduce published stats ✅ · T2 independent GEO rebuild ✅ · T3 consistency within tolerances ✅**
+> (primary: Horvath1/GrimAge median/max \|Δ\| and all ICC bands met near-exactly on the same GSE55763
+> cohort; two clocks' median \|Δ\| ~0.03 yr outside a coarse published range — strict rule PARTIAL).
+> Evidence: `TIER3_PROTOCOL.md`, `TIER3_COMPARISON.md`. Steps below retained as the original locked
+> instruction. Canonical status: `../tracker.md`, `CLAIMS.md`.
 
 1. **Fast path:** score the PC-Clocks **example** replicate data with pinned
    methylCIPHER → run reliage v0.3.0 → compare to published references. Debug the

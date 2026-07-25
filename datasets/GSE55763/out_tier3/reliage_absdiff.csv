@@ -1,0 +1,9 @@
+clock,median_abs,max_abs,frac_le_1p5
+GrimAge,0.929,2.411,0.694
+Hannum,0.87,4.562,0.611
+Horvath1,2.076,5.452,0.25
+PCGrimAge,0.331,1.286,1.0
+PCHannum,0.391,2.481,0.972
+PCHorvath1,0.748,2.689,0.917
+PCPhenoAge,0.582,1.567,0.972
+PhenoAge,2.429,8.582,0.333
