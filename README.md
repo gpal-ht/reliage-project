@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml/badge.svg)](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml)
 
-**An open-source Python package (library + CLI) that benchmarks the measurement
-reliability of epigenetic clocks** — the reference implementation of measurement
-science for aging biomarkers.
+**An open-source Python package (library + command-line tool) that benchmarks the
+measurement reliability of epigenetic clocks** — the reference implementation of
+measurement science for aging biomarkers.
 _Version 1: technical reliability. (Roadmap: agreement, uncertainty, calibration,
 limits of detection, responsiveness — same architecture. See `Contributions/PIR03-C2/VISION.md`.)_
 
@@ -64,53 +64,124 @@ a test-retest reliability harness).
 
 ## Using reliage
 
-Four steps, install → verdict. The engine is Python; **scoring (betas → scores) is
-a separate external step**, because reliage never touches methylation betas.
+You need **Python 3.10+** and **git**. reliage is not on PyPI yet, so it installs
+from this repository.
 
-**1 · Install the engine** (numpy / pandas / scipy only):
+### Run the demo — copy, paste, done
+
+These four commands go from an empty terminal to a full reliability report. They
+run on a small example dataset bundled in the repo, so **nothing else to download**:
 
 ```bash
-pip install -e .
+git clone https://github.com/gpal-ht/reliage-project.git
+cd reliage-project
+pip install .
+python -m reliage.scoring.run_analysis examples/example_scores.csv examples/example_map.csv --out out/
 ```
 
-**2 · Get a score table + replicate map.** reliage consumes *scores*, not betas.
+Then open the results in `out/` (see [what you get](#what-you-get) below). The
+bundled example is a synthetic score table with four original↔PC clock pairs, so the
+report shows the PC versions coming out more reliable — the effect reliage measures.
 
-- *Just trying it out* — skip scoring; generate a table with known ICCs:
-  ```python
-  from reliage import simulate_replicate_scores
-  scores, groups = simulate_replicate_scores(clock_iccs={"ClockA": 0.95, "ClockB": 0.6})
-  ```
-- *Real data* — score your betas with an external scorer (pinned v1 primary =
-  **methylCIPHER**, R); any scorer emitting the **Versioned Score Table** schema
-  works (pyaging, your own clock):
-  ```bash
-  Rscript reliage/scoring/score_methylCIPHER.R betas.csv pheno.csv scores.csv
-  ```
+### Run on your own data
 
-**3 · Run the benchmark** — end-to-end CLI, or the Python API:
+reliage works on clock **scores**, not raw methylation data. You give it two CSVs:
+
+- **`scores.csv`** — first column `sample_id`, then one column per clock:
+
+  | sample_id | Horvath1 | PCHorvath1 | … |
+  |---|---|---|---|
+  | P01_run1 | 51.2 | 50.8 | … |
+  | P01_run2 | 49.7 | 50.6 | … |
+
+- **`map.csv`** — which samples are repeat measurements of the same person:
+
+  | subject | sample_id |
+  |---|---|
+  | P01 | P01_run1 |
+  | P01 | P01_run2 |
+
+Then run the same command on your files:
 
 ```bash
-# CLI: score table + replicate map  →  full analysis in out/
 python -m reliage.scoring.run_analysis scores.csv map.csv --out out/
 ```
+
+The scores themselves come from an **external scorer** (reliage never touches
+methylation betas). The pinned v1 primary scorer is **methylCIPHER** (in R);
+**pyaging** or your own clock work too — anything emitting the **Versioned Score
+Table** format:
+
+```bash
+Rscript reliage/scoring/score_methylCIPHER.R betas.csv pheno.csv scores.csv
+```
+
+### What you get
+
+The run writes four files to `out/`:
+
+| File | What it holds |
+|---|---|
+| `leaderboard.csv` | per-clock ICC + within-subject error (SD / SEM / **MDC95**) + reliability band |
+| `contrasts.csv` | PC-vs-original within-subject **variance ratio** (the primary endpoint) + bootstrap CI |
+| `RESULTS.md` / `results.json` | human- and machine-readable summary |
+
+### Prefer Python?
+
+The same benchmark runs as a library call, on tables you already hold in memory:
+
 ```python
-# or the library, on in-memory tables
 from reliage import run_reliability_benchmark
 board = run_reliability_benchmark(scores, groups, form="ICC2", k=2)
 print(board.to_markdown())
 ```
 
-**4 · Read the outputs** (written to `out/`):
+For a runnable Python walkthrough with commentary: `python examples/quickstart.py`.
 
-| File | What it holds |
-|---|---|
-| `leaderboard.csv` | per-clock ICC + within-subject error (SD / SEM / **MDC95**) + Koo–Li band |
-| `contrasts.csv` | PC-vs-original within-subject **variance ratio** (primary endpoint) + bootstrap CI |
-| `RESULTS.md` / `results.json` | human- and machine-readable summary |
+### On real public data (GSE55763)
 
-New to it? Run `python examples/quickstart.py` (no downloads). Full real-data
-commands: **`docs/PIR03-C2/PIPELINE.md`**; pinned-version reproduction:
-**`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`**. Details for each step are below.
+The v1 result was produced on GSE55763 (Lehne et al., *Genome Biology* 2015):
+Illumina 450K, 36 samples measured in duplicate across separate batches — a
+ready-made cross-batch technical-replicate design. Exact, reproducible commands are
+in [`docs/PIR03-C2/PIPELINE.md`](docs/PIR03-C2/PIPELINE.md); a self-contained
+independent-reproduction guide (pinned versions, data checksums, expected values
+**with tolerances**) is in
+[`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`](docs/PIR03-C2/REPRODUCTION_PACKAGE.md).
+
+> Contributors: `pip install -e ".[dev]"` installs the test extras; run the suite
+> with `pytest -q` and the dependency-light correctness gates with
+> `python -m reliage.selfcheck`.
+
+---
+
+## What it computes
+
+- **ICC(2,1)** by default — two-way random effects, *absolute agreement*, single
+  measurement. This is the right test-retest metric: it asks whether repeat
+  measurements *agree in value*, not merely correlate. A clock with a systematic
+  between-batch drift is correctly penalised by ICC(2,1) while ICC(3,1)
+  consistency would miss it (the quickstart demonstrates exactly this).
+- Also **ICC(1,1)** and **ICC(3,1)**, F-distribution confidence intervals, and
+  Koo & Li (2016) qualitative bands (excellent / good / moderate / poor).
+- **Within-subject error** (SD / SEM), coefficient of repeatability, Bland–Altman
+  limits of agreement, and **MDC95** (the smallest detectable change per individual).
+- **PC-vs-original within-subject variance ratio** (the primary endpoint) with
+  paired-bootstrap confidence intervals.
+
+## Verification
+
+Two independent, literature-anchored correctness checks — run without pytest:
+
+```bash
+python -m reliage.selfcheck
+```
+
+1. **ICC engine** reproduces the canonical Shrout & Fleiss (1979) worked example
+   (published ICC(1,1)=0.17, ICC(2,1)=0.29, ICC(3,1)=0.71).
+2. **End-to-end**, the benchmark recovers known target ICCs from a synthetic
+   generator and ranks clocks in the correct reliability order.
+
+Full test suite (needs pytest): `pytest -q`.
 
 ---
 
@@ -134,91 +205,13 @@ findings as new. Its contribution is making the benchmark that produces them
 Foundry Constitution's "reproducible, independently checkable, challengeable"
 property, applied to clock reliability.
 
----
-
-## Install
-
-```bash
-pip install -e .            # core engine (numpy, pandas, scipy)
-pip install -e ".[dev]"     # + pytest
-```
-
-Scoring (betas → scores) is done by an **external scorer**, not reliage: the pinned v1 primary is
-**methylCIPHER** (R); **pyaging** is the implementation-sensitivity check. reliage never touches
-betas — it consumes the score table they emit. See `docs/PIR03-C2/PIPELINE.md` and
-`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`.
-
-## Quickstart (no downloads)
-
-```bash
-python examples/quickstart.py
-```
-
-```python
-from reliage import run_reliability_benchmark, simulate_replicate_scores
-
-scores, groups = simulate_replicate_scores(clock_iccs={"ClockA": 0.95, "ClockB": 0.6})
-board = run_reliability_benchmark(scores, groups, form="ICC2", k=2)
-print(board.to_markdown())
-```
-
-`scores` is a table indexed by sample id with one column per clock; `groups`
-maps each subject to its replicate sample ids. That's all the reliability core
-needs — whatever produced the scores (methylCIPHER, pyaging, your own
-clock), reliability is computed identically.
-
-## On real public data (GSE55763)
-
-The v1 result was produced on **GSE55763** (Lehne et al., *Genome Biology* 2015): Illumina 450K,
-with **36 samples measured in duplicate across separate batches** — a ready-made cross-batch
-technical-replicate design (the same replicate data the published reliability figures used). The
-end-to-end pipeline is:
-
-```
-raw betas (GEO)  →  reconstruct replicate design  →  score with pinned methylCIPHER (R)
-   →  Versioned Score Table (scores.csv)  →  reliage engine  →  reliability + variance-ratio verdict
-```
-
-Exact, reproducible commands: **`docs/PIR03-C2/PIPELINE.md`**. A self-contained
-independent-reproduction guide (pinned versions, data md5, expected values **with tolerances**) is
-in **`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`**. Because reliage consumes only the score table +
-replicate map, any scorer emitting the Versioned Score Table schema runs the pipeline unchanged
-(demonstrated in E2, where pyaging reproduced the result).
-
----
-
-## What it computes
-
-- **ICC(2,1)** by default — two-way random effects, *absolute agreement*, single
-  measurement. This is the right test-retest metric: it asks whether repeat
-  measurements *agree in value*, not merely correlate. A clock with a systematic
-  between-batch drift is correctly penalised by ICC(2,1) while ICC(3,1)
-  consistency would miss it (the quickstart demonstrates exactly this).
-- Also **ICC(1,1)** and **ICC(3,1)**, F-distribution confidence intervals, and
-  Koo & Li (2016) qualitative bands (excellent / good / moderate / poor).
-
-## Verification
-
-Two independent, literature-anchored correctness checks — run without pytest:
-
-```bash
-python -m reliage.selfcheck
-```
-
-1. **ICC engine** reproduces the canonical Shrout & Fleiss (1979) worked example
-   (published ICC(1,1)=0.17, ICC(2,1)=0.29, ICC(3,1)=0.71).
-2. **End-to-end**, the benchmark recovers known target ICCs from a synthetic
-   generator and ranks clocks in the correct reliability order.
-
-Full test suite (needs pytest): `pytest -q`.
+## Current status — first real-data result
 
 **Real-data milestone — ACHIEVED (Milestone 001, frozen tag `v0.3.1-scientific-baseline`):** on
 public GSE55763 replicate data (36 cross-batch technical-replicate pairs), PC-transformed clocks
 reduce within-subject technical variance vs their originals (supported 4/4), turning a gated result
 into an open, rerunnable one — and the conclusion is **implementation-robust** (Experiment E2).
 Canonical status: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`; full handover `docs/HANDOVER_v0.3.1.md`.
-
----
 
 ## Roadmap
 
