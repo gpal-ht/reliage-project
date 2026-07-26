@@ -268,7 +268,7 @@ findings as new. Its contribution is making the benchmark that produces them
 Foundry Constitution's "reproducible, independently checkable, challengeable"
 property, applied to clock reliability.
 
-## Current status — first real-data result
+## Scientific status
 
 **Real-data milestone — ACHIEVED (Milestone 001, frozen tag `v0.3.1-scientific-baseline`):** on
 public GSE55763 replicate data (36 cross-batch technical-replicate pairs), PC-transformed clocks
