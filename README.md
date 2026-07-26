@@ -2,7 +2,9 @@
 
 [![CI](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml/badge.svg)](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml)
 
-**The open reference implementation of measurement science for epigenetic clocks.**
+**An open-source Python package (library + CLI) that benchmarks the measurement
+reliability of epigenetic clocks** — the reference implementation of measurement
+science for aging biomarkers.
 _Version 1: technical reliability. (Roadmap: agreement, uncertainty, calibration,
 limits of detection, responsiveness — same architecture. See `Contributions/PIR03-C2/VISION.md`.)_
 
@@ -57,6 +59,58 @@ environment. It depends on **neither** ComputAgeBench nor any methylation pipeli
 This is contribution **PIR03-C2** in the Frontier Research Foundry engineering
 tracker (Project Intelligence Report 0003, "Can We Measure Aging?", Project 2:
 a test-retest reliability harness).
+
+---
+
+## Using reliage
+
+Four steps, install → verdict. The engine is Python; **scoring (betas → scores) is
+a separate external step**, because reliage never touches methylation betas.
+
+**1 · Install the engine** (numpy / pandas / scipy only):
+
+```bash
+pip install -e .
+```
+
+**2 · Get a score table + replicate map.** reliage consumes *scores*, not betas.
+
+- *Just trying it out* — skip scoring; generate a table with known ICCs:
+  ```python
+  from reliage import simulate_replicate_scores
+  scores, groups = simulate_replicate_scores(clock_iccs={"ClockA": 0.95, "ClockB": 0.6})
+  ```
+- *Real data* — score your betas with an external scorer (pinned v1 primary =
+  **methylCIPHER**, R); any scorer emitting the **Versioned Score Table** schema
+  works (pyaging, your own clock):
+  ```bash
+  Rscript reliage/scoring/score_methylCIPHER.R betas.csv pheno.csv scores.csv
+  ```
+
+**3 · Run the benchmark** — end-to-end CLI, or the Python API:
+
+```bash
+# CLI: score table + replicate map  →  full analysis in out/
+python -m reliage.scoring.run_analysis scores.csv map.csv --out out/
+```
+```python
+# or the library, on in-memory tables
+from reliage import run_reliability_benchmark
+board = run_reliability_benchmark(scores, groups, form="ICC2", k=2)
+print(board.to_markdown())
+```
+
+**4 · Read the outputs** (written to `out/`):
+
+| File | What it holds |
+|---|---|
+| `leaderboard.csv` | per-clock ICC + within-subject error (SD / SEM / **MDC95**) + Koo–Li band |
+| `contrasts.csv` | PC-vs-original within-subject **variance ratio** (primary endpoint) + bootstrap CI |
+| `RESULTS.md` / `results.json` | human- and machine-readable summary |
+
+New to it? Run `python examples/quickstart.py` (no downloads). Full real-data
+commands: **`docs/PIR03-C2/PIPELINE.md`**; pinned-version reproduction:
+**`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`**. Details for each step are below.
 
 ---
 
