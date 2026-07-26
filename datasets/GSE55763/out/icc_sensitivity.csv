@@ -1,0 +1,9 @@
+clock,ICC1,ICC1_lo,ICC1_hi,ICC1_band,ICC2,ICC2_lo,ICC2_hi,ICC2_band,ICC3,ICC3_lo,ICC3_hi,ICC3_band
+PCGrimAge,0.998,0.9961,0.999,excellent,0.998,0.9954,0.9991,excellent,0.9983,0.9967,0.9991,excellent
+PCPhenoAge,0.9962,0.9926,0.9981,excellent,0.9962,0.9926,0.9981,excellent,0.9961,0.9924,0.998,excellent
+PCHannum,0.9957,0.9917,0.9978,excellent,0.9957,0.9914,0.9978,excellent,0.996,0.9922,0.998,excellent
+PCHorvath1,0.99,0.9806,0.9949,excellent,0.99,0.9806,0.9949,excellent,0.9898,0.9801,0.9948,excellent
+GrimAge,0.9889,0.9786,0.9943,excellent,0.9889,0.9786,0.9943,excellent,0.9889,0.9783,0.9943,excellent
+Hannum,0.9784,0.9584,0.9889,excellent,0.9784,0.9584,0.9889,excellent,0.9783,0.958,0.9889,excellent
+Horvath1,0.9446,0.8947,0.9712,excellent,0.9445,0.8941,0.9713,excellent,0.9432,0.8916,0.9706,excellent
+PhenoAge,0.9179,0.846,0.9571,excellent,0.9179,0.8458,0.9572,excellent,0.9171,0.8437,0.9569,excellent
