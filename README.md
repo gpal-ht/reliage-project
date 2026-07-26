@@ -6,12 +6,14 @@
 _Version 1: technical reliability. (Roadmap: agreement, uncertainty, calibration,
 limits of detection, responsiveness — same architecture. See `Contributions/PIR03-C2/VISION.md`.)_
 
-`reliage` is the *reliability* companion to [ComputAgeBench](https://github.com/ComputationalAgingLab/ComputAge)
-(which benchmarks clock *accuracy*). It answers a different question: **how
-stable is a clock's estimate when the same biological sample is measured more
-than once?** It computes an intraclass-correlation (ICC) leaderboard across
-clocks on public technical-replicate data, so a clock's reliability can be
-audited, reproduced, and challenged from a clean environment.
+`reliage` benchmarks clock **reliability** — a different axis from *accuracy* tools like
+[ComputAgeBench](https://github.com/ComputationalAgingLab/ComputAge): **how stable is a clock's
+estimate when the same biological sample is measured more than once?** It is **scorer-agnostic** —
+it consumes a *score table + replicate map* from any scoring engine (v1 uses methylCIPHER) via the
+**Versioned Score Table** contract, then reports an ICC leaderboard, within-subject error, and the
+PC-vs-original within-subject variance ratio — so a clock's reliability can be audited, reproduced,
+and challenged from a clean environment. It depends on **neither** ComputAgeBench nor any
+methylation pipeline.
 
 This is contribution **PIR03-C2** in the Frontier Research Foundry engineering
 tracker (Project Intelligence Report 0003, "Can We Measure Aging?", Project 2:
@@ -35,7 +37,7 @@ The reliability findings themselves are established (clocks are typically
 *technically* reliable, ICC > 0.9, but far less *biologically* stable, ICC ≈
 0.4–0.7; PC-transformation improves reliability). `reliage` does not claim those
 findings as new. Its contribution is making the benchmark that produces them
-**open, reproducible, Python-native, and composable with ComputAgeBench** — the
+**open, reproducible, Python-native, and scorer-agnostic** — the
 Foundry Constitution's "reproducible, independently checkable, challengeable"
 property, applied to clock reliability.
 
@@ -44,10 +46,14 @@ property, applied to clock reliability.
 ## Install
 
 ```bash
-pip install -e .            # core (numpy, pandas, scipy)
-pip install -e ".[computage]"   # + score beta matrices with ComputAgeBench clocks
-pip install -e ".[dev]"         # + pytest
+pip install -e .            # core engine (numpy, pandas, scipy)
+pip install -e ".[dev]"     # + pytest
 ```
+
+Scoring (betas → scores) is done by an **external scorer**, not reliage: the pinned v1 primary is
+**methylCIPHER** (R); **pyaging** is the implementation-sensitivity check. reliage never touches
+betas — it consumes the score table they emit. See `docs/PIR03-C2/PIPELINE.md` and
+`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`.
 
 ## Quickstart (no downloads)
 
@@ -65,30 +71,26 @@ print(board.to_markdown())
 
 `scores` is a table indexed by sample id with one column per clock; `groups`
 maps each subject to its replicate sample ids. That's all the reliability core
-needs — whatever produced the scores (ComputAgeBench, methylCIPHER, your own
+needs — whatever produced the scores (methylCIPHER, pyaging, your own
 clock), reliability is computed identically.
 
 ## On real public data (GSE55763)
 
-The confirmed public anchor dataset is **GSE55763** (Lehne et al., *Genome
-Biology* 2015): Illumina 450K, 2,711 samples of which **36 are measured in
-duplicate** — a ready-made technical-replicate design, and the same set shipped
-as PC-Clocks' example replicate data.
+The v1 result was produced on **GSE55763** (Lehne et al., *Genome Biology* 2015): Illumina 450K,
+with **36 samples measured in duplicate across separate batches** — a ready-made cross-batch
+technical-replicate design (the same replicate data the published reliability figures used). The
+end-to-end pipeline is:
 
-```python
-from reliage import load_gse55763, score_samples, run_reliability_benchmark
-from reliage.clocks import computage_clock
-
-betas, groups = load_gse55763("data/gse55763/betas.parquet",
-                              "data/gse55763/meta.parquet")
-scores = score_samples(betas, {"PhenoAge": computage_clock("PhenoAge"),
-                               "Hannum":   computage_clock("Hannum")})
-board = run_reliability_benchmark(scores, groups, form="ICC2", k=2)
-print(board.to_markdown())
+```
+raw betas (GEO)  →  reconstruct replicate design  →  score with pinned methylCIPHER (R)
+   →  Versioned Score Table (scores.csv)  →  reliage engine  →  reliability + variance-ratio verdict
 ```
 
-(You fetch GSE55763 once yourself; `load_gse55763` parses what you downloaded so
-the run stays reproducible with an explicit provenance trail. See its docstring.)
+Exact, reproducible commands: **`docs/PIR03-C2/PIPELINE.md`**. A self-contained
+independent-reproduction guide (pinned versions, data md5, expected values **with tolerances**) is
+in **`docs/PIR03-C2/REPRODUCTION_PACKAGE.md`**. Because reliage consumes only the score table +
+replicate map, any scorer emitting the Versioned Score Table schema runs the pipeline unchanged
+(demonstrated in E2, where pyaging reproduced the result).
 
 ---
 
@@ -134,11 +136,14 @@ Canonical status: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`; full handover `d
 - [x] **Real-data run on GSE55763 with pinned methylCIPHER — supported 4/4 (M1)** — scorer is methylCIPHER, not ComputAgeBench (accuracy-only; not a dependency)
 - [x] **Robustness suite: compression audit, LOSO, Bland–Altman, outliers — selective denoising (M1)**
 - [x] **Implementation-robustness check vs pyaging — robust (E2)**
-- [ ] Tier-3 formal published-reference comparison
-- [ ] Independent third-party rerun
+- [x] **Tier-3 published-reference comparison vs Higgins-Chen 2022 — agreement (scoped; two clocks PARTIAL)**
+- [x] **ICC-form sensitivity (ICC 1,1 / 3,1) — verdict invariant**
+- [x] **Public CI (pytest, py3.10–3.13) — green**
+- [x] **v1 protocol frozen (`docs/PIR03-C2/PROTOCOL_FREEZE.md`)**
+- [ ] Independent third-party rerun (package ready) — **gates the v1.0 tag** (CLAIMS #8)
+- [ ] v1.0 release (held pending the independent rerun) + normalized Versioned Score Table spec freeze
 - [ ] Add SATSA (E-MTAB-7309) and an EPIC-array replicate set (v2)
 - [ ] Biological-reliability mode (within-subject short-interval replicates) (v2)
-- [ ] v1.0 release (after Tier-3 + independent rerun) + Versioned Score Table spec freeze
 
 ## References
 
@@ -151,4 +156,4 @@ Canonical status: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`; full handover `d
 
 ## License
 
-MIT (code). GSE55763 and ComputAgeBench data carry their own licenses.
+MIT (code). GSE55763 data, methylCIPHER/pyaging, and the PC-clock reference each carry their own licenses.
