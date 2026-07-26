@@ -80,8 +80,10 @@ python -m reliage.scoring.run_analysis examples/example_scores.csv examples/exam
 ```
 
 Then open the results in `out/` (see [what you get](#what-you-get) below). The
-bundled example is a synthetic score table with four original↔PC clock pairs, so the
-report shows the PC versions coming out more reliable — the effect reliage measures.
+bundled example is a synthetic score table with four original↔PC clock pairs, drawn
+with *equal* reliability per pair — so the report is a neutral illustration of the
+output format, not a staged result. On real data (below), the PC variants separate
+from their originals.
 
 ### Run on your own data
 
