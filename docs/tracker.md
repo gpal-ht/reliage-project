@@ -30,7 +30,7 @@
 | Next action | **independent third-party rerun (→ CLAIMS #8; package `REPRODUCTION_PACKAGE.md` ready)**; (optional) figure-level confirmation of ICC anchors — THEN consider v1.0 + Versioned Score Table spec freeze |
 | Following action | v1.0 release decision (after independent rerun); Versioned Score Table v1.0 spec freeze (`VST_DESIGN_NOTES.md`) |
 | Publication gate | tiered reproduction gate **RATIFIED (Tier-3, 2026-07-25)**: T1 reproduce published stats ✅ · T2 independent GEO rebuild ✅ · T3 consistency within tolerances ✅ (primary; 2 minor 0.03-yr range excursions) |
-| Remaining v1 work | **Independent third-party rerun (CLAIMS #8); public CI (pytest green); v1 protocol + Versioned Score Table spec freeze.** _(Done: real scores, pairing audit, abs-diff + Bland–Altman LoA, RESULTS/technical report, robustness, E2, Tier-3 reference comparison, ICC(1,1)/(3,1) sensitivity.)_ |
+| Remaining v1 work | **Independent third-party rerun (CLAIMS #8, package ready); v1 protocol + Versioned Score Table spec freeze.** _(Done: real scores, pairing audit, abs-diff + Bland–Altman LoA, RESULTS/technical report, robustness, E2, Tier-3, ICC(1,1)/(3,1) sensitivity, public CI green on py3.10–3.13.)_ |
 | North Star | The open reproducible **metrology layer for aging biomarkers** (biomarker-agnostic; v1 = epigenetic clocks, technical reliability) |
 | Key docs | VISION, PROTOCOL, SCORING_DECISION, CLOCK_MANIFEST.csv, acceptance/*, STATUS_REVIEW, INPUT_OUTPUT (all under `Contributions/PIR03-C2/`) |
 
