@@ -2,11 +2,14 @@
 
 [![CI](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml/badge.svg)](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml)
 
-**An open-source Python package (library + command-line tool) that benchmarks the
-measurement reliability of epigenetic clocks** — the reference implementation of
-measurement science for aging biomarkers.
-_Version 1: technical reliability. (Roadmap: agreement, uncertainty, calibration,
-limits of detection, responsiveness — same architecture. See `Contributions/PIR03-C2/VISION.md`.)_
+**reliage is an open-source Python package (library + command-line tool)
+implementing the measurement-science framework for aging biomarkers. Version 1
+benchmarks the technical reliability of epigenetic clocks.**
+
+- **Today (v1):** technical reliability of epigenetic clocks.
+- **Long-term mission:** the reference implementation of measurement science for
+  aging biomarkers — agreement, uncertainty, calibration, limits of detection,
+  responsiveness, on the same architecture. See [`docs/PIR03-C2/VISION.md`](docs/PIR03-C2/VISION.md).
 
 ---
 
@@ -48,13 +51,49 @@ on the clock's **technical reliability**, and it is different for every clock.
   and still be biologically noisy; reliage measures the technical floor those other
   questions sit on top of.
 
+## Who this is for
+
+**reliage is for you if you** develop or compare aging biomarkers, design
+intervention studies, benchmark measurement reliability, or run reproducibility
+studies on epigenetic clocks.
+
+**reliage is *not* the tool if you need** methylation preprocessing, clock
+*calculation* itself (that is the scorer's job — methylCIPHER / pyaging),
+biological-age prediction, or interpretation of what a change *means* biologically.
+reliage sits one layer above scoring and one layer below biology.
+
 ## How it works
 
-`reliage` is **scorer-agnostic**: it consumes a *score table + replicate map* from any scoring
-engine (v1 uses methylCIPHER) via the **Versioned Score Table** contract, then reports an ICC
-leaderboard, within-subject error (SD / SEM / MDC95), and the PC-vs-original within-subject variance
-ratio — so a clock's reliability can be audited, reproduced, and challenged from a clean
-environment. It depends on **neither** ComputAgeBench nor any methylation pipeline.
+reliage's **measurement engine is scorer-agnostic** — it never touches raw
+methylation data. It consumes a *score table + replicate map* through the
+**Versioned Score Table** contract:
+
+```
+        Raw methylation data
+                 │
+                 ▼
+   External scorer  (methylCIPHER / pyaging / your own clock)
+                 │
+                 ▼
+      Versioned Score Table      ← the contract
+                 │
+                 ▼
+            reliage              ← ICC · within-subject error · variance ratio
+                 │
+                 ▼
+     Measurement capability      ← "reliable enough for WHAT?"
+```
+
+The **Versioned Score Table is the contract between biomarker scoring and
+measurement science**: any scorer that produces this artifact can be evaluated by
+reliage without modification. Experiment E2 showed this is a *validated* contract,
+not just an architectural idea — methylCIPHER and pyaging both drove the same
+pipeline to the same verdict.
+
+So reliage's contribution is not "it computes ICC." It is that every reliability
+result is **independently reconstructable, scorer-agnostic, provenance-aware, and
+reproducible** from a clean environment — depending on **neither** ComputAgeBench
+nor any methylation pipeline.
 
 This is contribution **PIR03-C2** in the Frontier Research Foundry engineering
 tracker (Project Intelligence Report 0003, "Can We Measure Aging?", Project 2:
@@ -172,6 +211,18 @@ independent-reproduction guide (pinned versions, data checksums, expected values
   limits of agreement, and **MDC95** (the smallest detectable change per individual).
 - **PC-vs-original within-subject variance ratio** (the primary endpoint) with
   paired-bootstrap confidence intervals.
+- **Detectability screen** — for a planned effect size, whether it clears each
+  clock's individual measurement-noise floor. A screen, not a power calculation.
+
+Each metric maps to a decision you actually make:
+
+| Metric | Supports the decision |
+|---|---|
+| **ICC** | Overall repeatability — can this clock rank people consistently? |
+| **SEM / within-subject SD** | Typical measurement error on one reading |
+| **MDC95** | Smallest change in one individual you can call real (not noise) |
+| **Variance ratio** | Whether the PC transform actually improves reliability |
+| **Detectability screen** | Whether a planned intervention effect clears the measurement-noise floor |
 
 ## Verification
 
@@ -187,6 +238,13 @@ python -m reliage.selfcheck
    generator and ranks clocks in the correct reliability order.
 
 Full test suite (needs pytest): `pytest -q`.
+
+## Design philosophy
+
+- **Scorer-agnostic architecture** — measurement science is separated from clock scoring.
+- **Versioned Score Table contract** — one validated exchange format between the two.
+- **Reproducibility by default** — pinned provenance, public data, clean-room reruns.
+- **Evidence before confidence** — claims stay provisional until the evidence supports them.
 
 ---
 
@@ -216,7 +274,13 @@ property, applied to clock reliability.
 public GSE55763 replicate data (36 cross-batch technical-replicate pairs), PC-transformed clocks
 reduce within-subject technical variance vs their originals (supported 4/4), turning a gated result
 into an open, rerunnable one — and the conclusion is **implementation-robust** (Experiment E2).
-Canonical status: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`; full handover `docs/HANDOVER_v0.3.1.md`.
+
+**Where the science lives** (the scientific state is tracked separately from any
+report — reports support the claims, they don't define them):
+
+- [`docs/PIR03-C2/CLAIMS.md`](docs/PIR03-C2/CLAIMS.md) — the current scientific state (what is / isn't yet supported).
+- [`docs/FOUNDRY_PRINCIPLES.md`](docs/FOUNDRY_PRINCIPLES.md) — how the project decides what counts as evidence.
+- [`docs/tracker.md`](docs/tracker.md) — live project tracker · [`docs/HANDOVER_v0.3.1.md`](docs/HANDOVER_v0.3.1.md) — full handover.
 
 ## Roadmap
 
