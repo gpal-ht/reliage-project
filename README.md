@@ -130,15 +130,18 @@ The run writes four files to `out/`:
 
 ### Prefer Python?
 
-The same benchmark runs as a library call, on tables you already hold in memory:
+The same benchmark runs as a library call, on tables you already hold in memory.
+This snippet is self-contained — it makes its own synthetic scores, so it runs as-is:
 
 ```python
-from reliage import run_reliability_benchmark
+from reliage import simulate_replicate_scores, run_reliability_benchmark
+
+scores, groups = simulate_replicate_scores(clock_iccs={"ClockA": 0.9, "ClockB": 0.6})
 board = run_reliability_benchmark(scores, groups, form="ICC2", k=2)
 print(board.to_markdown())
 ```
 
-For a runnable Python walkthrough with commentary: `python examples/quickstart.py`.
+For a fuller runnable walkthrough with commentary: `python examples/quickstart.py`.
 
 ### On real public data (GSE55763)
 
