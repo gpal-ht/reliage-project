@@ -1,5 +1,9 @@
 # PIR03-C2 — Locked Protocol (Milestone 0)
 
+> 🔒 **v1 FROZEN (2026-07-26)** — see [`PROTOCOL_FREEZE.md`](PROTOCOL_FREEZE.md). Decisions here are
+> immutable for v1; change only via a dated, versioned amendment. (The `v1.0` release tag is held
+> pending independent reproducibility, CLAIMS #8.)
+
 Purpose: freeze analytic decisions **before** producing results or charts, so the
 reproduction is confirmatory, not outcome-shaped. This document supersedes the
 looser framing in earlier notes where they conflict. It incorporates the expert

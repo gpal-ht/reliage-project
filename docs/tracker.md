@@ -16,7 +16,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **M1 result produced + frozen (`v0.3.1-scientific-baseline`); Experiment E2 complete — SUPPORTED 4/4, implementation-robust** |
+| Status | **v1 PROTOCOL FROZEN (2026-07-26; `PROTOCOL_FREEZE.md`).** M1 frozen (`v0.3.1-scientific-baseline`) + E2 + Tier-3 + ICC sensitivity + public CI green. **v1.0 tag HELD pending independent reproduction (CLAIMS #8).** |
 | Current milestone | **M1 (Gate 3) + E2 done**; open evidence dimensions = Tier-3 reference agreement, independent rerun (see `CLAIMS.md`) |
 | Primary scorer | **methylCIPHER `@9e8c1e5`** (LOCKED) — installed, run; GrimAge=V1 per manifest |
 | Secondary scorer | **pyaging 0.3.1 — implementation-sensitivity check, RUN (Experiment E2, 2026-07-25): implementation-robust** (see E2 row) |
@@ -27,10 +27,10 @@
 | Reporting | **DONE:** `docs/PIR03-C2/TECHNICAL_REPORT_v0.1.md` (14 sections, 5 figures) + `PIPELINE.md`. |
 | Experiment E2 | **DONE (2026-07-25): Implementation-ROBUST.** pyaging 0.3.1 reproduces M1 — per-sample scores r≥0.9997, ICC & variance-ratio ordering ρ=1.000, verdict supported 4/4 in both. One benign divergence: GrimAge constant −2.63 yr calibration offset (r=1.0). Caveat: PC-clock independence partial (shared Higgins-Chen reference). Docs: `E2_PROTOCOL`, `IMPLEMENTATION_COMPARISON`, `POSTMORTEM_E2`; scores `out_E2/`. |
 | Tier-3 | **DONE (2026-07-25): published-reference agreement — Supported (scoped).** Same-cohort reproduction of Higgins-Chen 2022: Horvath1 median/max \|Δ\| 2.08/5.45 vs 2.1/5.4, GrimAge 0.93/2.41 vs 0.9/2.4 yr; Horvath1 orig ICC 0.945/0.817 exact; PC ICC bands all met (20/22). 2 clocks' median \|Δ\| ~0.03 yr outside a coarse range (strict: PARTIAL). Docs: `TIER3_PROTOCOL`, `TIER3_COMPARISON`. Tiered gate **ratified**. |
-| Next action | **independent third-party rerun (→ CLAIMS #8; package `REPRODUCTION_PACKAGE.md` ready)**; (optional) figure-level confirmation of ICC anchors — THEN consider v1.0 + Versioned Score Table spec freeze |
+| Next action | **independent third-party rerun (→ CLAIMS #8; package `REPRODUCTION_PACKAGE.md` ready) — the SOLE gate on the `v1.0` tag.** On a passing report: tag `v1.0`, bump `pyproject` to 1.0.0, write release notes. |
 | Following action | v1.0 release decision (after independent rerun); Versioned Score Table v1.0 spec freeze (`VST_DESIGN_NOTES.md`) |
 | Publication gate | tiered reproduction gate **RATIFIED (Tier-3, 2026-07-25)**: T1 reproduce published stats ✅ · T2 independent GEO rebuild ✅ · T3 consistency within tolerances ✅ (primary; 2 minor 0.03-yr range excursions) |
-| Remaining v1 work | **Independent third-party rerun (CLAIMS #8, package ready); v1 protocol + Versioned Score Table spec freeze.** _(Done: real scores, pairing audit, abs-diff + Bland–Altman LoA, RESULTS/technical report, robustness, E2, Tier-3, ICC(1,1)/(3,1) sensitivity, public CI green on py3.10–3.13.)_ |
+| Remaining v1 work | **Independent third-party rerun (CLAIMS #8) → then tag `v1.0`.** _(Done: real scores, pairing audit, abs-diff + Bland–Altman LoA, RESULTS/technical report, robustness, E2, Tier-3, ICC(1,1)/(3,1) sensitivity, public CI green, **v1 protocol freeze**.)_ Versioned Score Table normalized-spec freeze = v1.x/v2 (long-form contract already frozen). |
 | North Star | The open reproducible **metrology layer for aging biomarkers** (biomarker-agnostic; v1 = epigenetic clocks, technical reliability) |
 | Key docs | VISION, PROTOCOL, SCORING_DECISION, CLOCK_MANIFEST.csv, acceptance/*, STATUS_REVIEW, INPUT_OUTPUT (all under `Contributions/PIR03-C2/`) |
 

@@ -1,5 +1,8 @@
 # ADR: v1 clock-scoring path (LOCKED)
 
+> 🔒 **v1 FROZEN (2026-07-26)** — see [`PROTOCOL_FREEZE.md`](PROTOCOL_FREEZE.md). Scorer pins + the
+> ratified tiered reproduction gate are immutable for v1 (dated amendments only).
+
 **Decision:** **methylCIPHER (R) is the pinned PRIMARY scorer for v1. pyaging (Python)
 is a SECONDARY, independent implementation-sensitivity check only.**
 
