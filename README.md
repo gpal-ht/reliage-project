@@ -6,14 +6,52 @@
 _Version 1: technical reliability. (Roadmap: agreement, uncertainty, calibration,
 limits of detection, responsiveness — same architecture. See `Contributions/PIR03-C2/VISION.md`.)_
 
-`reliage` benchmarks clock **reliability** — a different axis from *accuracy* tools like
-[ComputAgeBench](https://github.com/ComputationalAgingLab/ComputAge): **how stable is a clock's
-estimate when the same biological sample is measured more than once?** It is **scorer-agnostic** —
-it consumes a *score table + replicate map* from any scoring engine (v1 uses methylCIPHER) via the
-**Versioned Score Table** contract, then reports an ICC leaderboard, within-subject error, and the
-PC-vs-original within-subject variance ratio — so a clock's reliability can be audited, reproduced,
-and challenged from a clean environment. It depends on **neither** ComputAgeBench nor any
-methylation pipeline.
+---
+
+## The problem
+
+You are designing a longevity intervention study. You will measure each
+participant's epigenetic age before and after, and you expect the intervention to
+turn back the clock by, say, **1.5 years**. Before you spend the money, one
+question decides whether the study can work at all:
+
+> **If I measured the *same* person's blood twice, how far apart would the two
+> readings be — from the assay alone, with no biological change?**
+
+If that measurement noise is ±2 years, a 1.5-year effect is *invisible*: you
+cannot tell a real reversal from run-to-run jitter. If it is ±0.3 years, the
+effect is easily detectable. Same clock, same sample — the answer depends entirely
+on the clock's **technical reliability**, and it is different for every clock.
+
+Longevity researchers hit this in three recurring situations:
+
+1. **Choosing a clock for a trial.** "Which of these clocks can actually detect the
+   effect size I expect?" reliage reports each clock's **MDC95** — the smallest
+   change that exceeds its measurement noise — so you pick a clock *before*
+   committing to a design, not after a null result.
+2. **Interpreting a single participant's change.** "This person's DNAmAge dropped
+   3 years between two draws — is that real, or is it noise?" reliage tells you
+   whether 3 years clears that clock's noise floor.
+3. **Deciding whether a 'more reliable' clock is worth it.** PC-transformed clocks
+   are advertised as more stable. reliage quantifies *how much* less within-subject
+   noise the PC version actually has (the variance-ratio endpoint) — on
+   independently rebuilt public data, so the claim is checkable, not taken on trust.
+
+**What reliage answers:** how stable is a clock's estimate when the same biological
+sample is measured more than once, and what change is large enough to trust.
+**What it deliberately does *not* answer:** whether a clock is *accurate* (close to
+true chronological/biological age — that is [ComputAgeBench](https://github.com/ComputationalAgingLab/ComputAge)'s
+job), and whether a change is *biologically* meaningful. A clock can be
+rock-solid technically and still be biologically noisy; reliage measures the
+technical floor those other questions sit on top of.
+
+## How it works
+
+`reliage` is **scorer-agnostic**: it consumes a *score table + replicate map* from any scoring
+engine (v1 uses methylCIPHER) via the **Versioned Score Table** contract, then reports an ICC
+leaderboard, within-subject error (SD / SEM / MDC95), and the PC-vs-original within-subject variance
+ratio — so a clock's reliability can be audited, reproduced, and challenged from a clean
+environment. It depends on **neither** ComputAgeBench nor any methylation pipeline.
 
 This is contribution **PIR03-C2** in the Frontier Research Foundry engineering
 tracker (Project Intelligence Report 0003, "Can We Measure Aging?", Project 2:
