@@ -1,5 +1,7 @@
 # reliage
 
+[![CI](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml/badge.svg)](https://github.com/gpal-ht/reliage-project/actions/workflows/ci.yml)
+
 **The open reference implementation of measurement science for epigenetic clocks.**
 _Version 1: technical reliability. (Roadmap: agreement, uncertainty, calibration,
 limits of detection, responsiveness — same architecture. See `Contributions/PIR03-C2/VISION.md`.)_
