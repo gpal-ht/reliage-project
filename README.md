@@ -23,27 +23,28 @@ cannot tell a real reversal from run-to-run jitter. If it is ±0.3 years, the
 effect is easily detectable. Same clock, same sample — the answer depends entirely
 on the clock's **technical reliability**, and it is different for every clock.
 
-Longevity researchers hit this in three recurring situations:
+## Questions reliage answers
 
-1. **Choosing a clock for a trial.** "Which of these clocks can actually detect the
-   effect size I expect?" reliage reports each clock's **MDC95** — the smallest
-   change that exceeds its measurement noise — so you pick a clock *before*
-   committing to a design, not after a null result.
-2. **Interpreting a single participant's change.** "This person's DNAmAge dropped
-   3 years between two draws — is that real, or is it noise?" reliage tells you
-   whether 3 years clears that clock's noise floor.
-3. **Deciding whether a 'more reliable' clock is worth it.** PC-transformed clocks
-   are advertised as more stable. reliage quantifies *how much* less within-subject
-   noise the PC version actually has (the variance-ratio endpoint) — on
-   independently rebuilt public data, so the claim is checkable, not taken on trust.
+- **How reliable is this clock?** How much do two measurements of the *same*
+  sample disagree — the within-subject error (SD / SEM), ICC, and repeatability.
+- **What change can I trust?** What is the smallest change that exceeds this
+  clock's measurement noise (**MDC95**) — so a participant's 3-year drop can be
+  called *real* or *noise*.
+- **Which clock should I run for my trial?** Given the effect size I expect (say
+  1.5 years), which clocks can actually detect it and which are too noisy — chosen
+  *before* committing to a design, not after a null result.
+- **Is the "more reliable" version actually more reliable?** How much less
+  within-subject noise does a PC-transformed clock have than its original (the
+  variance-ratio endpoint) — measured on independently rebuilt public data, so the
+  claim is checkable, not taken on trust.
 
-**What reliage answers:** how stable is a clock's estimate when the same biological
-sample is measured more than once, and what change is large enough to trust.
-**What it deliberately does *not* answer:** whether a clock is *accurate* (close to
-true chronological/biological age — that is [ComputAgeBench](https://github.com/ComputationalAgingLab/ComputAge)'s
-job), and whether a change is *biologically* meaningful. A clock can be
-rock-solid technically and still be biologically noisy; reliage measures the
-technical floor those other questions sit on top of.
+## Questions reliage does *not* answer
+
+- **Is the clock *accurate*?** (Close to true chronological/biological age — that
+  is [ComputAgeBench](https://github.com/ComputationalAgingLab/ComputAge)'s job.)
+- **Is a change *biologically* meaningful?** A clock can be rock-solid technically
+  and still be biologically noisy; reliage measures the technical floor those other
+  questions sit on top of.
 
 ## How it works
 
