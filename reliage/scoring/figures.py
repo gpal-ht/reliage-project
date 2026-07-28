@@ -17,11 +17,12 @@ os.makedirs(fig, exist_ok=True)
 C_O, C_P = "#B5651D", "#0B6E63"   # original (amber) / PC (teal)
 PAIRS = ["Horvath1", "Hannum", "PhenoAge", "GrimAge"]
 
-contr = pd.read_csv(f"{out}/contrasts.csv")
-diffs = pd.read_csv(f"{out}/robustness/pair_diffs.csv")
-comp  = pd.read_csv(f"{out}/robustness/compression_summary.csv")
-loso  = pd.read_csv(f"{out}/robustness/loso.csv")
-ba    = pd.read_csv(f"{out}/robustness/bland_altman.csv")
+from reliage.scoring.generated_manifest import require_csv
+contr = require_csv(f"{out}/contrasts.csv", "contrasts")
+diffs = require_csv(f"{out}/robustness/pair_diffs.csv", "pair_diffs")
+comp  = require_csv(f"{out}/robustness/compression_summary.csv", "compression_summary")
+loso  = require_csv(f"{out}/robustness/loso.csv", "loso")
+ba    = require_csv(f"{out}/robustness/bland_altman.csv", "bland_altman")
 
 # 1 -- forest -----------------------------------------------------------------
 f, ax = plt.subplots(figsize=(7, 3.2))

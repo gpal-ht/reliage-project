@@ -27,6 +27,7 @@ import pandas as pd
 from ..benchmark import run_reliability_benchmark
 from ..contrast import run_paired_contrasts
 from ..detectability import recommend_for_effect
+from .generated_manifest import require_csv
 
 # Protocol-locked pairs; wide-column labels use "<clock>" and "PC<clock>".
 DEFAULT_PAIRS = [("Horvath1", "PCHorvath1"), ("Hannum", "PCHannum"),
@@ -35,7 +36,7 @@ DEFAULT_PAIRS = [("Horvath1", "PCHorvath1"), ("Hannum", "PCHannum"),
 
 def load_scores_wide(scores_csv: str) -> pd.DataFrame:
     """Return a wide scores frame (index=sample_id, columns=clock labels)."""
-    df = pd.read_csv(scores_csv)
+    df = require_csv(scores_csv, "scores")
     cols = {c.lower(): c for c in df.columns}
     if "clock_id" in cols and "score" in cols:      # long form -> pivot
         variant = cols.get("variant")
@@ -51,7 +52,7 @@ def load_scores_wide(scores_csv: str) -> pd.DataFrame:
 
 
 def load_map(map_csv: str) -> dict:
-    m = pd.read_csv(map_csv)
+    m = require_csv(map_csv, "map")
     c = {x.lower(): x for x in m.columns}
     groups: dict[str, list[str]] = {}
     for subj, sid in zip(m[c["subject"]], m[c["sample_id"]]):

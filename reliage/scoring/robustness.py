@@ -13,16 +13,17 @@ so every recomputation matches the headline analysis.
 import os, sys, numpy as np, pandas as pd
 from scipy import stats
 from reliage.scoring.run_analysis import load_scores_wide, load_map, DEFAULT_PAIRS
+from reliage.scoring.generated_manifest import require_csv
 from reliage.benchmark import build_replicate_matrix
 from reliage.icc import compute_icc, smallest_detectable_change
 from reliage.contrast import variance_ratio_contrast, _var_within
 
 scores_csv, map_csv, pheno_csv, outdir = sys.argv[1:5]
 os.makedirs(outdir, exist_ok=True)
-wide = load_scores_wide(scores_csv)
-groups = load_map(map_csv)
+wide = load_scores_wide(scores_csv)                # guarded
+groups = load_map(map_csv)                          # guarded
 subjects = list(groups.keys())
-pheno = pd.read_csv(pheno_csv)
+pheno = require_csv(pheno_csv, "pheno")
 age_by_sample = pheno.set_index("sample_id")["age"].astype(float)
 subj_age = np.array([age_by_sample[groups[s][0]] for s in subjects])  # both batches share age
 

@@ -11,10 +11,19 @@ Usage:
 
 Clock mapping is PINNED in docs/PIR03-C2/E2_PROTOCOL.md.
 """
-import sys, pandas as pd, numpy as np
+import os, sys, pandas as pd, numpy as np
 import pyaging as pya
 
 betas_csv, pheno_csv, outfn = sys.argv[1], sys.argv[2], sys.argv[3]
+
+# Generated inputs are not committed (see docs/PIR03-C2/GENERATED_FILES.md). This scorer
+# runs in an isolated env without reliage importable, so guard inline rather than via
+# reliage.scoring.generated_manifest.
+for _p, _how in ((betas_csv, "bash tools/GSE55763/extract_betas.sh <ids> <betas.txt.gz> " + betas_csv),
+                 (pheno_csv, "python tools/GSE55763/parse_metadata.py <series_matrix.txt.gz> generated/GSE55763/metadata")):
+    if not os.path.exists(_p):
+        sys.exit(f"Missing generated file: {_p}\n  Generate with: {_how}\n"
+                 f"  See docs/PIR03-C2/GENERATED_FILES.md")
 
 # pyaging clock -> (M1 clock_id, variant). GrimAge V1 = pyaging 'grimage'.
 CLOCKS = {

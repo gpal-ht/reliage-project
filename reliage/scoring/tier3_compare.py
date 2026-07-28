@@ -22,9 +22,10 @@ PC_RAW_MIN, PC_ACCEL = 0.985, (0.94, 1.0)                               # PC raw
 HORV_RAW, HORV_ACCEL = (0.925, 0.965), (0.787, 0.847)                   # 0.945+-0.02, 0.817+-0.03
 PC_FRAC_MIN = 0.75
 
-d = pd.read_csv(f"{out}/robustness/pair_diffs.csv")
-lb = pd.read_csv(f"{out}/leaderboard.csv").set_index("clock")
-la = pd.read_csv(f"{out}/leaderboard_ageaccel.csv").set_index("clock")
+from reliage.scoring.generated_manifest import require_csv
+d = require_csv(f"{out}/robustness/pair_diffs.csv", "pair_diffs")
+lb = require_csv(f"{out}/leaderboard.csv", "leaderboard").set_index("clock")
+la = require_csv(f"{out}/leaderboard_ageaccel.csv", "leaderboard_ageaccel").set_index("clock")
 me = (d.groupby("clock").absdiff
         .agg(median_abs="median", max_abs="max",
              frac_le_1p5=lambda s: (s <= 1.5).mean()).round(3))

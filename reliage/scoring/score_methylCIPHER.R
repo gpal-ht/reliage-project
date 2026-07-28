@@ -27,6 +27,13 @@ suppressWarnings(suppressMessages({
 
 args  <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 3) stop("usage: Rscript score_methylCIPHER.R betas.csv pheno.csv out_scores.csv [pc_reference]")
+# Generated inputs are not committed (see docs/PIR03-C2/GENERATED_FILES.md) — fail clearly if absent.
+if (!file.exists(args[1])) stop("Missing generated file: betas.csv (", args[1], ").\n",
+  "  Generate with: bash tools/GSE55763/extract_betas.sh <replicate_sample_ids.txt> <betas.txt.gz> ", args[1], "\n",
+  "  See docs/PIR03-C2/GENERATED_FILES.md")
+if (!file.exists(args[2])) stop("Missing generated file: pheno.csv (", args[2], ").\n",
+  "  Generate with: python tools/GSE55763/parse_metadata.py <series_matrix.txt.gz> generated/GSE55763/metadata\n",
+  "  See docs/PIR03-C2/GENERATED_FILES.md")
 betas <- read.csv(args[1], row.names = 1, check.names = FALSE)
 pheno_in <- read.csv(args[2], stringsAsFactors = FALSE)
 outfn <- args[3]

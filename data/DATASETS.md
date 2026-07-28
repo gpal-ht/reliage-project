@@ -14,6 +14,12 @@ analysis results — is written under `generated/`, which is **entirely gitignor
 local, regenerable build area, never committed. A fresh clone reruns the pipeline to
 repopulate it (see `docs/PIR03-C2/REPRODUCTION_PACKAGE.md`).
 
+Because those files may be absent, every reader guards them: a missing or malformed
+generated file fails with an actionable message naming the step that produces it. The
+full map — each generated file, its producing step, and its expected shape — is
+[`docs/PIR03-C2/GENERATED_FILES.md`](../docs/PIR03-C2/GENERATED_FILES.md) (auto-generated
+from `reliage/scoring/generated_manifest.py`).
+
 ## Technical reliability (same sample measured twice)
 
 | Name | Accession | Source | Array | Replicates | ~Size | License / access |
