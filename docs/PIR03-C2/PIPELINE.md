@@ -183,6 +183,11 @@ built from source), Python with numpy/pandas/scipy. Sources:
 `ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/suppl/` (betas + series matrix)
 and Zenodo `10.5281/zenodo.19455622` (PC reference).
 
+> The 9.7 GB `GSE55763_normalized_betas.txt.gz` is a **build-time input** to step 2
+> only; its path is a command-line argument (not hardcoded), so it can live anywhere.
+> The committed Versioned Score Table (`scores.csv`) means the analysis (step 4) needs
+> neither the gz nor `betas.csv` — those are required only to rebuild/re-score from raw.
+
 ```bash
 # 1. replicate design from the series matrix
 python datasets/GSE55763/build/parse_metadata.py \

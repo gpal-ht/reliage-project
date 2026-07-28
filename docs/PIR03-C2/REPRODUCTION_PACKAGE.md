@@ -67,6 +67,15 @@ the point of *independent* reproduction). Committed result artifacts are under
 
 Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 
+> **The 9.7 GB gz is a build-time input, not a runtime dependency, and its location is not
+> hardcoded.** It is consumed *only* by `extract_betas.sh` (§5.1), which takes its path as a
+> command-line argument (the `<path>` below) — put it wherever you like. Because the **Versioned
+> Score Table (`scores.csv`) is committed to the repo**, the reliage *analysis* (§5.4) reproduces
+> with **no reference to the gz at all**; you need the gz only to rebuild `betas.csv` from raw
+> (§5.1) or to re-score (§5.3). It is never required to check the headline result, and nothing in
+> the code reads a fixed `Datasets/` path — that path appears only in `metadata/PROVENANCE.md` as a
+> record of where this run's md5-verified backup was kept.
+
 ---
 
 ## 5. Reproduce — Core (A) and Recommended (B)
