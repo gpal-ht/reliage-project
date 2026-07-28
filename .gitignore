@@ -1,24 +1,20 @@
 __pycache__/
 *.pyc
 *.egg-info/
-build/
-dist/
+/build/
+/dist/
 .pytest_cache/
 .venv/
 
 # --- Data & generated artifacts ---
-# The dataset SOURCE (raw downloads) lives OUTSIDE the repo, under the shared
-# $LONGEVITY_DATA_ROOT (see data/DATASETS.md). Only small GENERATED summaries are
-# committed, under generated/. Large or easily-rebuilt derivatives are NOT committed.
-# (gitignore has no inline comments — keep patterns on their own lines.)
+# Dataset SOURCE data lives OUTSIDE the repo, under the shared $LONGEVITY_DATA_ROOT
+# (see data/DATASETS.md). EVERYTHING under generated/ is a local, regenerable build
+# output (reconstructed metadata, betas.csv, the Versioned Score Table, analysis
+# results) and is NEVER committed. The generator scripts are code and live in
+# tools/, which IS tracked.
+generated/
 
-# raw source is external — never in the repo
-generated/*/raw/*
-# 596 MB derivative — rebuilt from the external gz, never committed
-generated/*/processed/betas.csv
-
-# Ad-hoc / reproduction run output dirs (repo-root only).
-# The committed M1/E2 results under generated/*/out* ARE tracked and kept.
+# Ad-hoc / reproduction run output dirs (repo-root)
 /out/
 /reliage_out/
 /out_repro/

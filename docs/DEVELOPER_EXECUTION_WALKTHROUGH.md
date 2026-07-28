@@ -43,8 +43,8 @@ Hold this picture. Every file in the repo sits on one side of that seam.
 
 ```
 data/download_data.sh                      Stage 1  acquire raw GEO files
-generated/GSE55763/build/parse_metadata.py  Stage 2  reconstruct the 36×2 replicate design
-generated/GSE55763/build/extract_betas.sh   Stage 3  stream out the 72 replicate beta columns
+tools/GSE55763/parse_metadata.py  Stage 2  reconstruct the 36×2 replicate design
+tools/GSE55763/extract_betas.sh   Stage 3  stream out the 72 replicate beta columns
 reliage/scoring/score_methylCIPHER.R       Stage 4  PRIMARY scorer  (betas → scores.csv)
 reliage/scoring/score_pyaging.py           Stage 4' SECONDARY scorer (E2)  (betas → scores.csv)
    ── Versioned Score Table seam: generated/GSE55763/processed/scores.csv ──
@@ -144,14 +144,14 @@ betas.
 
 **Files involved**
 ```
-generated/GSE55763/build/parse_metadata.py      the reconstructor
+tools/GSE55763/parse_metadata.py      the reconstructor
 generated/GSE55763/metadata/{pheno,map}.csv     outputs
 generated/GSE55763/metadata/replicate_sample_ids.txt
 ```
 
 **Entry command**
 ```bash
-python generated/GSE55763/build/parse_metadata.py \
+python tools/GSE55763/parse_metadata.py \
        GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 ```
 
@@ -222,13 +222,13 @@ single streaming pass — no 30 GB in RAM.
 
 **Files involved**
 ```
-generated/GSE55763/build/extract_betas.sh       streaming extractor
+tools/GSE55763/extract_betas.sh       streaming extractor
 generated/GSE55763/processed/betas.csv          output (596 MB)
 ```
 
 **Entry command**
 ```bash
-bash generated/GSE55763/build/extract_betas.sh \
+bash tools/GSE55763/extract_betas.sh \
      generated/GSE55763/metadata/replicate_sample_ids.txt \
      /path/to/GSE55763_normalized_betas.txt.gz \
      generated/GSE55763/processed/betas.csv
@@ -766,11 +766,11 @@ from source), Python with numpy/pandas/scipy. (Verbatim from
 
 ```bash
 # 1. replicate design from the series matrix
-python generated/GSE55763/build/parse_metadata.py \
+python tools/GSE55763/parse_metadata.py \
        GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 
 # 2. extract the 72 replicate beta columns from the 9.7 GB matrix
-bash generated/GSE55763/build/extract_betas.sh \
+bash tools/GSE55763/extract_betas.sh \
        generated/GSE55763/metadata/replicate_sample_ids.txt \
        /path/to/GSE55763_normalized_betas.txt.gz \
        generated/GSE55763/processed/betas.csv
@@ -809,9 +809,9 @@ pytest -q                       # full suite
 | Stage | File | Function / anchor | Line |
 |---|---|---|---|
 | 1 | `data/download_data.sh` | `get_gse55763()` | 27-37 |
-| 2 | `generated/GSE55763/build/parse_metadata.py` | pairing regex | 41 |
+| 2 | `tools/GSE55763/parse_metadata.py` | pairing regex | 41 |
 | 2 | ″ | pairing audit | 68-69 |
-| 3 | `generated/GSE55763/build/extract_betas.sh` | `zcat \| awk` extract | 17-29 |
+| 3 | `tools/GSE55763/extract_betas.sh` | `zcat \| awk` extract | 17-29 |
 | 3 | ″ | 72-column assert | 23 |
 | 4 | `reliage/scoring/score_methylCIPHER.R` | pin block | 18-22 |
 | 4 | ″ | all-NA drop | 39-46 |

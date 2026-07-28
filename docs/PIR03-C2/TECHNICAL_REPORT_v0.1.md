@@ -253,8 +253,8 @@ variation); this study does not probe the biological content of the removed vari
 Full pipeline and commands: `docs/PIR03-C2/PIPELINE.md`. In brief, from the repo root:
 
 ```bash
-python generated/GSE55763/build/parse_metadata.py GSE55763_series_matrix.txt.gz generated/GSE55763/metadata
-bash   generated/GSE55763/build/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <betas.txt.gz>  generated/GSE55763/processed/betas.csv
+python tools/GSE55763/parse_metadata.py GSE55763_series_matrix.txt.gz generated/GSE55763/metadata
+bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <betas.txt.gz>  generated/GSE55763/processed/betas.csv
 Rscript reliage/scoring/score_methylCIPHER.R       generated/GSE55763/processed/betas.csv  generated/GSE55763/metadata/pheno.csv  generated/GSE55763/processed/scores.csv  <PCClocks_data.qs2>
 python -m reliage.scoring.run_analysis  generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv --out generated/GSE55763/out
 python -m reliage.scoring.age_accel_icc generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv generated/GSE55763/metadata/pheno.csv

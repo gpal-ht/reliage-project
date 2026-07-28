@@ -6,10 +6,13 @@ Sizes are approximate; methylation matrices are large.
 
 **Data root.** Datasets live under `$LONGEVITY_DATA_ROOT` (a single external location
 reused across longevity projects), default `C:\Ambitious Projects\Longevity Project\Datasets`.
-Set the env var (or pass `--data-root DIR`) to point elsewhere. Only the small
-**generated** summaries (reconstructed metadata, the Versioned Score Table, analysis
-outputs) are committed — in the repo's `generated/` folder, not here. See
-[`generated/README.md`](../generated/README.md).
+Set the env var (or pass `--data-root DIR`) to point elsewhere.
+
+**What is / isn't in git.** The generator **code** lives in tracked `tools/`. Everything
+it produces — reconstructed metadata, `betas.csv`, the Versioned Score Table, and all
+analysis results — is written under `generated/`, which is **entirely gitignored**: a
+local, regenerable build area, never committed. A fresh clone reruns the pipeline to
+repopulate it (see `docs/PIR03-C2/REPRODUCTION_PACKAGE.md`).
 
 ## Technical reliability (same sample measured twice)
 
@@ -37,11 +40,13 @@ $LONGEVITY_DATA_ROOT/                 (external — the dataset SOURCE, shared a
   GSE49065/raw/ ...                                          (biological)
   E-MTAB-7309/raw/ ...                                       (technical, SATSA)
 
-<repo>/generated/                     (in git — GENERATED summaries, not the dataset)
-  GSE55763/build/     parse_metadata.py, extract_betas.sh   (the generators)
+<repo>/tools/GSE55763/                (IN GIT — the generator code)
+  parse_metadata.py, extract_betas.sh
+
+<repo>/generated/                     (LOCAL, gitignored — regenerated outputs, never committed)
   GSE55763/metadata/  map.csv, pheno.csv, replicate_sample_ids.txt, PROVENANCE.md
-  GSE55763/processed/ scores*.csv (committed) · betas.csv (gitignored, rebuilt)
-  GSE55763/out*/      analysis results (committed)
+  GSE55763/processed/ scores*.csv, betas.csv
+  GSE55763/out*/      analysis results
 ```
 
 ## From download → reliage

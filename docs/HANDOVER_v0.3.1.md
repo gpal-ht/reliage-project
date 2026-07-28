@@ -95,8 +95,8 @@ capability estimates, owned by reliage). The Versioned Score Table is that bound
 
 ```
 Raw betas (GEO)                         [external, large; not in git]
-      │  generated/GSE55763/build/parse_metadata.py   (reconstruct replicate design from GEO series matrix)
-      │  generated/GSE55763/build/extract_betas.sh    (stream-extract the replicate columns)
+      │  tools/GSE55763/parse_metadata.py   (reconstruct replicate design from GEO series matrix)
+      │  tools/GSE55763/extract_betas.sh    (stream-extract the replicate columns)
       ▼
 Cohort inputs:  betas.csv  +  pheno.csv (sample_id, age, female)  +  map.csv (subject → sample_id)
       │  reliage/scoring/score_methylCIPHER.R   (PRIMARY scorer, R)      ─┐
@@ -252,11 +252,9 @@ reproducible from inputs + code. Do not hand-edit generated files.
 | `reliage/scoring/age_accel_icc.py` | age-acceleration ICC companion (optional 4th arg = out path) | canonical |
 | `reliage/scoring/robustness.py` | compression audit / LOSO / outliers / Bland–Altman | canonical |
 | `reliage/scoring/figures.py` | the 5 M1 figures | canonical (code) |
-| `generated/GSE55763/build/` | dataset-prep scripts (metadata parse, column extract) | canonical |
-| `generated/GSE55763/metadata/` | `pheno.csv`, `map.csv`, `replicate_sample_ids.txt`, `PROVENANCE.md` | generated (committed) |
-| `generated/GSE55763/processed/` | `betas.csv` (**gitignored, 596 MB**), `scores.csv`, `scores_pyaging.csv`, `scores_wide.csv` | generated |
-| `generated/GSE55763/out/` | M1 results (leaderboard, contrasts, RESULTS.md, ROBUSTNESS.md, figures/) | generated (force-added at M1 tag) |
-| `generated/GSE55763/out_E2/` | E2 results (RESULTS_E2.md, contrasts, robustness/) | generated |
+| `tools/GSE55763/` | dataset-prep scripts (metadata parse, column extract) | canonical |
+| `generated/` (all) | reconstructed metadata, `betas.csv`, `scores*.csv`, M1/E2/Tier-3 results + figures | **generated — entirely gitignored, local-only; regenerated from source + `tools/`** |
+| ↳ retained reference | the original M1/E2 outputs stay in git **history** at tag `v0.3.1-scientific-baseline` (pre-rename `datasets/GSE55763/` path) | frozen snapshot |
 | `docs/FOUNDRY_PRINCIPLES.md` | cross-project methodology (P1–P8) | canonical |
 | `docs/tracker.md` | **Current State block is authoritative for what is true now** | canonical |
 | `docs/PIR03-C2/CLAIMS.md` | evidence ledger (the scientific state) | canonical |
@@ -422,10 +420,11 @@ verification before they became false findings (root-cause ledger in
   difference**, not within-subject SD. Do not conflate.
 
 **Reproducibility / provenance traps:**
-- `.gitignore` excludes `generated/*/processed/betas.csv`, `out/`, and `scores*.csv`. The small M1 result
-  artifacts were **force-added** intentionally so the tag is self-contained; `betas.csv` (596 MB)
-  and the GEO gz are deliberately *not* committed. When adding new result artifacts to a milestone,
-  force-add the *small* ones and never `betas.csv`.
+- `.gitignore` excludes **all of `generated/`** — it is a local, regenerable build area; nothing in
+  it is committed (metadata, `betas.csv`, `scores*.csv`, results). The generator *code* lives in
+  tracked `tools/`. (Historically, at the `v0.3.1-scientific-baseline` tag, the small result
+  artifacts were force-added under the old `datasets/GSE55763/` path — that snapshot remains in git
+  history for reference.)
 - **Keep git GUIs and sync/backup clients (OneDrive/Dropbox) OFF this repo.** During M1 a concurrent
   tool mutating `.git` under `C:\Ambitious Projects` caused refs to flip-flop between two unrelated
   lineages and `Invalid argument` file locks on `scores.csv`. Commits were never lost (they stay in

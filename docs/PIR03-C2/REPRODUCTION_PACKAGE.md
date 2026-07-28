@@ -49,9 +49,11 @@ git clone https://github.com/gpal-ht/reliage-project.git
 cd reliage-project
 git checkout v0.3.1-scientific-baseline    # frozen reference; or 'develop' for latest docs
 ```
-Note: `betas.csv` and large data are intentionally NOT in git — you rebuild them from GEO (that is
-the point of *independent* reproduction). Committed result artifacts are under
-`generated/GSE55763/out/` (M1), `out_E2/` (E2), `out_tier3/` — your regenerated values should match.
+Note: **nothing under `generated/` is in git** — the whole pipeline (reconstructed metadata,
+`betas.csv`, the score table, and all results) is regenerated locally from the external source,
+which is the point of *independent* reproduction. Compare your regenerated numbers to the
+**expected values in §6** (the frozen `v0.3.1-scientific-baseline` tag also retains the original M1
+results in git history, under the pre-rename `datasets/GSE55763/` path).
 
 ---
 
@@ -67,14 +69,13 @@ the point of *independent* reproduction). Committed result artifacts are under
 
 Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 
-> **The 9.7 GB gz is a build-time input, not a runtime dependency, and its location is not
-> hardcoded.** It is consumed *only* by `extract_betas.sh` (§5.1), which takes its path as a
-> command-line argument (the `<path>` below) — put it wherever you like. Because the **Versioned
-> Score Table (`scores.csv`) is committed to the repo**, the reliage *analysis* (§5.4) reproduces
-> with **no reference to the gz at all**; you need the gz only to rebuild `betas.csv` from raw
-> (§5.1) or to re-score (§5.3). It is never required to check the headline result, and nothing in
-> the code reads a fixed `Datasets/` path — that path appears only in `metadata/PROVENANCE.md` as a
-> record of where this run's md5-verified backup was kept.
+> **The 9.7 GB gz is a build-time input, and its location is not hardcoded.** It is consumed *only*
+> by `extract_betas.sh` (§5.1), which takes its path as a command-line argument (the `<path>` below)
+> — put it wherever you like; nothing in the code reads a fixed `Datasets/` path (it appears only in
+> `PROVENANCE.md` as a record of where the backup was kept). The gz — plus the series matrix and PC
+> reference — is required to regenerate the pipeline, because **nothing under `generated/` is
+> committed**: a clone rebuilds the metadata, `betas.csv`, the score table, and the results from the
+> external source.
 
 ---
 
@@ -82,13 +83,14 @@ Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 
 ### 5.1 Rebuild the cohort (no scoring yet)
 ```bash
-python generated/GSE55763/build/parse_metadata.py  GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
+python tools/GSE55763/parse_metadata.py  GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 #  EXPECT: "replicate samples: 72  groups: [1, 2]  individuals: 36 ... malformed: 0"
-bash   generated/GSE55763/build/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <path>/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
+bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <path>/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
 #  EXPECT: "matched 72 beta columns" ; ~473,864 CpG rows, 73 columns
 ```
-Verify your `metadata/pheno.csv` and `map.csv` are byte-identical to the committed ones
-(`git diff --stat` after copying, or `diff`). They should be.
+Determinism: `parse_metadata.py` is deterministic, so re-running it yields identical
+`pheno.csv`/`map.csv`. (The `v0.3.1-scientific-baseline` tag retains a reference copy in git history,
+under the pre-rename `datasets/GSE55763/metadata/` path, if you want to diff against it.)
 
 ### 5.2 Install & pin the scorer (R)
 ```r
@@ -113,7 +115,8 @@ python -m reliage.scoring.age_accel_icc  generated/GSE55763/processed/scores.csv
 python -m reliage.scoring.robustness     generated/GSE55763/processed/scores.csv  generated/GSE55763/metadata/map.csv  generated/GSE55763/metadata/pheno.csv  out_repro/robustness
 python -m reliage.scoring.tier3_compare  out_repro  out_repro/tier3     # Recommended (B)
 ```
-Compare `out_repro/` to the committed `generated/GSE55763/out/` and the §6 tolerances.
+Compare `out_repro/` to the **§6 expected values + tolerances** (the M1 results are not committed;
+the `v0.3.1-scientific-baseline` tag retains them in git history).
 
 ## 5x. Reproduce — Extended (C, pyaging)
 In a **separate Python 3.9–3.13** env: `pip install pyaging`, then
