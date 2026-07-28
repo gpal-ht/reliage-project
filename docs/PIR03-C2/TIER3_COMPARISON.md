@@ -7,7 +7,7 @@ reproduction. The only excursions are two clocks' median absolute replicate diff
 ~0.03 yr outside a *coarse published range* for the non-highlighted clocks. **20 / 22 checks pass.**
 
 Protocol (locked before this run): `TIER3_PROTOCOL.md`. Inputs: frozen M1 outputs at tag
-`v0.3.1-scientific-baseline`. reliage-side numbers: `datasets/GSE55763/out_tier3/reliage_absdiff.csv`.
+`v0.3.1-scientific-baseline`. reliage-side numbers: `generated/GSE55763/out_tier3/reliage_absdiff.csv`.
 
 ## Why same-cohort matters
 GSE55763 is the Lehne 2015 technical-replicate data Higgins-Chen used. This is therefore a

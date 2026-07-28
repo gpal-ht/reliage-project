@@ -32,7 +32,7 @@ robustness methods · reporting format.
    emitted in the **identical Versioned Score Table schema** as M1.
 2. Run the **identical** reliage pipeline (`run_analysis` + `age_accel_icc` + `robustness`)
    on the pyaging table → `RESULTS_E2.md` and companion outputs, in a **separate** output
-   directory (`datasets/GSE55763/out_E2/`) so M1's `out/` is untouched.
+   directory (`generated/GSE55763/out_E2/`) so M1's `out/` is untouched.
 3. Compare the two implementations' scientific conclusions.
 
 ## Clock mapping (PINNED — pyaging 0.3.1, inspected 2026-07-25)

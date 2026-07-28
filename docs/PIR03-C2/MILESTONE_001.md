@@ -20,11 +20,11 @@ Table** → scorer-agnostic **reliage** measurement engine → robustness-qualif
 under explicit evidence and claim gates.
 
 Frozen deliverables at this tag:
-- `datasets/GSE55763/processed/scores.csv` — Versioned Score Table (576 rows)
-- `datasets/GSE55763/out/RESULTS.md` — primary reliability result
-- `datasets/GSE55763/out/ROBUSTNESS.md` + `robustness/` — refutation attempts
-- `datasets/GSE55763/out/figures/` — 5 figures (Fig 3 = signal-vs-noise)
-- `datasets/GSE55763/metadata/PROVENANCE.md` — commit, versions, coverage, md5
+- `generated/GSE55763/processed/scores.csv` — Versioned Score Table (576 rows)
+- `generated/GSE55763/out/RESULTS.md` — primary reliability result
+- `generated/GSE55763/out/ROBUSTNESS.md` + `robustness/` — refutation attempts
+- `generated/GSE55763/out/figures/` — 5 figures (Fig 3 = signal-vs-noise)
+- `generated/GSE55763/metadata/PROVENANCE.md` — commit, versions, coverage, md5
 - `docs/PIR03-C2/TECHNICAL_REPORT_v0.1.md`, `PIPELINE.md`
 
 ## Dataset

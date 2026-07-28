@@ -96,7 +96,7 @@ reliage/            the package
 tests/              pytest suite (test_icc, test_benchmark)
 examples/           quickstart.py, input_output_walkthrough.py
 data/               download_data.sh + DATASETS.md (run where data lives)
-datasets/           per-dataset raw/processed/metadata scaffold + READMEs
+generated/          per-dataset GENERATED summaries (metadata, scores, out/); raw source external ($LONGEVITY_DATA_ROOT)
 docs/PIR03-C2/      VISION, PROTOCOL, SCORING_DECISION, CLOCK_MANIFEST.csv,
                     acceptance/*, STATUS_REVIEW, INPUT_OUTPUT, TEST_CASES, ...
 docs/tracker.md     canonical project tracker (Current State block is authoritative)

@@ -43,11 +43,11 @@ Hold this picture. Every file in the repo sits on one side of that seam.
 
 ```
 data/download_data.sh                      Stage 1  acquire raw GEO files
-datasets/GSE55763/build/parse_metadata.py  Stage 2  reconstruct the 36×2 replicate design
-datasets/GSE55763/build/extract_betas.sh   Stage 3  stream out the 72 replicate beta columns
+generated/GSE55763/build/parse_metadata.py  Stage 2  reconstruct the 36×2 replicate design
+generated/GSE55763/build/extract_betas.sh   Stage 3  stream out the 72 replicate beta columns
 reliage/scoring/score_methylCIPHER.R       Stage 4  PRIMARY scorer  (betas → scores.csv)
 reliage/scoring/score_pyaging.py           Stage 4' SECONDARY scorer (E2)  (betas → scores.csv)
-   ── Versioned Score Table seam: datasets/GSE55763/processed/scores.csv ──
+   ── Versioned Score Table seam: generated/GSE55763/processed/scores.csv ──
 reliage/scoring/run_analysis.py            Stage 6  the reliage entrypoint (scores → RESULTS.md)
    reliage/benchmark.py                             ICC leaderboard
    reliage/icc.py                                   the verified ICC / SEM / MDC95 core
@@ -76,7 +76,7 @@ author-prepared convenience artifact (see the Box→GEO pivot in
 **Files involved**
 ```
 data/download_data.sh                         the downloader
-datasets/GSE55763/metadata/PROVENANCE.md      records source, size, md5
+generated/GSE55763/metadata/PROVENANCE.md      records source, size, md5
 ```
 
 **Entry command**
@@ -106,7 +106,7 @@ wget -r -np -nH --cut-dirs=6 -R "index.html*" \
 
 | Input | Value | Source |
 |---|---|---|
-| GEO record | `GSE55763` (Lehne et al. 2015, 450K) | `datasets/GSE55763/README.md:1` |
+| GEO record | `GSE55763` (Lehne et al. 2015, 450K) | `generated/GSE55763/README.md:1` |
 | Beta matrix file | `GSE55763_normalized_betas.txt.gz` | `PROVENANCE.md:20` |
 | …size | `10,378,167,001 bytes` (~9.7 GB; ~30 GB unzipped) | `PROVENANCE.md:21` |
 | …md5 | `64654afe3a8898641c3e321c5a5204df` | `PROVENANCE.md:22` |
@@ -144,15 +144,15 @@ betas.
 
 **Files involved**
 ```
-datasets/GSE55763/build/parse_metadata.py      the reconstructor
-datasets/GSE55763/metadata/{pheno,map}.csv     outputs
-datasets/GSE55763/metadata/replicate_sample_ids.txt
+generated/GSE55763/build/parse_metadata.py      the reconstructor
+generated/GSE55763/metadata/{pheno,map}.csv     outputs
+generated/GSE55763/metadata/replicate_sample_ids.txt
 ```
 
 **Entry command**
 ```bash
-python datasets/GSE55763/build/parse_metadata.py \
-       GSE55763_series_matrix.txt.gz  datasets/GSE55763/metadata
+python generated/GSE55763/build/parse_metadata.py \
+       GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 ```
 
 **Execution flow**
@@ -222,16 +222,16 @@ single streaming pass — no 30 GB in RAM.
 
 **Files involved**
 ```
-datasets/GSE55763/build/extract_betas.sh       streaming extractor
-datasets/GSE55763/processed/betas.csv          output (596 MB)
+generated/GSE55763/build/extract_betas.sh       streaming extractor
+generated/GSE55763/processed/betas.csv          output (596 MB)
 ```
 
 **Entry command**
 ```bash
-bash datasets/GSE55763/build/extract_betas.sh \
-     datasets/GSE55763/metadata/replicate_sample_ids.txt \
+bash generated/GSE55763/build/extract_betas.sh \
+     generated/GSE55763/metadata/replicate_sample_ids.txt \
      /path/to/GSE55763_normalized_betas.txt.gz \
-     datasets/GSE55763/processed/betas.csv
+     generated/GSE55763/processed/betas.csv
 ```
 
 **Execution flow**
@@ -285,16 +285,16 @@ is the primary scorer; it runs *where R + the data live*, not in a cloud sandbox
 **Files involved**
 ```
 reliage/scoring/score_methylCIPHER.R       the PRIMARY scorer  (walked below)
-datasets/GSE55763/processed/scores.csv     the Versioned Score Table (output)
-datasets/GSE55763/metadata/PROVENANCE.md   coverage + pins recorded here
+generated/GSE55763/processed/scores.csv     the Versioned Score Table (output)
+generated/GSE55763/metadata/PROVENANCE.md   coverage + pins recorded here
 ```
 
 **Entry command**
 ```bash
 Rscript reliage/scoring/score_methylCIPHER.R \
-        datasets/GSE55763/processed/betas.csv \
-        datasets/GSE55763/metadata/pheno.csv \
-        datasets/GSE55763/processed/scores.csv \
+        generated/GSE55763/processed/betas.csv \
+        generated/GSE55763/metadata/pheno.csv \
+        generated/GSE55763/processed/scores.csv \
         /path/to/PCClocks_data.qs2
 ```
 
@@ -429,7 +429,7 @@ This is the seam of the whole system, so it gets its own chapter.
 
 **What it is.** A long-form CSV — **one row per (sample, clock, variant)** — where
 every row carries its own complete provenance. On GSE55763: **576 rows** = 72
-samples × 4 clocks × 2 variants. File: `datasets/GSE55763/processed/scores.csv`.
+samples × 4 clocks × 2 variants. File: `generated/GSE55763/processed/scores.csv`.
 
 **Every column, where it comes from, why it exists**
 
@@ -486,9 +486,9 @@ reliage/detectability.py          "reliable enough for WHAT?" screen
 **Entry command**
 ```bash
 python -m reliage.scoring.run_analysis \
-       datasets/GSE55763/processed/scores.csv \
-       datasets/GSE55763/metadata/map.csv \
-       --out datasets/GSE55763/out
+       generated/GSE55763/processed/scores.csv \
+       generated/GSE55763/metadata/map.csv \
+       --out generated/GSE55763/out
 ```
 
 **Execution flow**
@@ -676,7 +676,7 @@ it computes nothing new.
 
 **File:** `reliage/scoring/figures.py` · **Entry:**
 ```bash
-python -m reliage.scoring.figures datasets/GSE55763/out datasets/GSE55763/out/figures
+python -m reliage.scoring.figures generated/GSE55763/out generated/GSE55763/out/figures
 ```
 
 **Which CSV → which figure** (`figures.py:20-24` reads; each block writes one PNG):
@@ -702,7 +702,7 @@ python -m reliage.scoring.figures datasets/GSE55763/out datasets/GSE55763/out/fi
 - **Tier-3 published-reference comparison** — `reliage/scoring/tier3_compare.py`.
   Compares reliage's frozen outputs to pinned Higgins-Chen anchors within locked
   tolerances (median/max |replicate diff| + ICC bands). Verdict PASS/PARTIAL/NOT MET.
-  Entry: `python -m reliage.scoring.tier3_compare datasets/GSE55763/out`.
+  Entry: `python -m reliage.scoring.tier3_compare generated/GSE55763/out`.
 
 Both read the Versioned Score Table and the frozen `out/` artifacts — never betas.
 
@@ -766,33 +766,33 @@ from source), Python with numpy/pandas/scipy. (Verbatim from
 
 ```bash
 # 1. replicate design from the series matrix
-python datasets/GSE55763/build/parse_metadata.py \
-       GSE55763_series_matrix.txt.gz  datasets/GSE55763/metadata
+python generated/GSE55763/build/parse_metadata.py \
+       GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 
 # 2. extract the 72 replicate beta columns from the 9.7 GB matrix
-bash datasets/GSE55763/build/extract_betas.sh \
-       datasets/GSE55763/metadata/replicate_sample_ids.txt \
+bash generated/GSE55763/build/extract_betas.sh \
+       generated/GSE55763/metadata/replicate_sample_ids.txt \
        /path/to/GSE55763_normalized_betas.txt.gz \
-       datasets/GSE55763/processed/betas.csv
+       generated/GSE55763/processed/betas.csv
 
 # 3. score (methylCIPHER engine) — pin the commit inside the R script first
 Rscript reliage/scoring/score_methylCIPHER.R \
-       datasets/GSE55763/processed/betas.csv \
-       datasets/GSE55763/metadata/pheno.csv \
-       datasets/GSE55763/processed/scores.csv \
+       generated/GSE55763/processed/betas.csv \
+       generated/GSE55763/metadata/pheno.csv \
+       generated/GSE55763/processed/scores.csv \
        /path/to/PCClocks_data.qs2
 
 # 4. reliability analysis (reliage engine) -> RESULTS.md
 python -m reliage.scoring.run_analysis \
-       datasets/GSE55763/processed/scores.csv \
-       datasets/GSE55763/metadata/map.csv \
-       --out datasets/GSE55763/out
+       generated/GSE55763/processed/scores.csv \
+       generated/GSE55763/metadata/map.csv \
+       --out generated/GSE55763/out
 
 # 5. age-acceleration ICC (companion)
 python -m reliage.scoring.age_accel_icc \
-       datasets/GSE55763/processed/scores.csv \
-       datasets/GSE55763/metadata/map.csv \
-       datasets/GSE55763/metadata/pheno.csv
+       generated/GSE55763/processed/scores.csv \
+       generated/GSE55763/metadata/map.csv \
+       generated/GSE55763/metadata/pheno.csv
 ```
 
 Verify the engine independently of any data:
@@ -809,9 +809,9 @@ pytest -q                       # full suite
 | Stage | File | Function / anchor | Line |
 |---|---|---|---|
 | 1 | `data/download_data.sh` | `get_gse55763()` | 27-37 |
-| 2 | `datasets/GSE55763/build/parse_metadata.py` | pairing regex | 41 |
+| 2 | `generated/GSE55763/build/parse_metadata.py` | pairing regex | 41 |
 | 2 | ″ | pairing audit | 68-69 |
-| 3 | `datasets/GSE55763/build/extract_betas.sh` | `zcat \| awk` extract | 17-29 |
+| 3 | `generated/GSE55763/build/extract_betas.sh` | `zcat \| awk` extract | 17-29 |
 | 3 | ″ | 72-column assert | 23 |
 | 4 | `reliage/scoring/score_methylCIPHER.R` | pin block | 18-22 |
 | 4 | ″ | all-NA drop | 39-46 |

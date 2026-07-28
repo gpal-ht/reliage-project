@@ -95,8 +95,8 @@ capability estimates, owned by reliage). The Versioned Score Table is that bound
 
 ```
 Raw betas (GEO)                         [external, large; not in git]
-      │  datasets/GSE55763/build/parse_metadata.py   (reconstruct replicate design from GEO series matrix)
-      │  datasets/GSE55763/build/extract_betas.sh    (stream-extract the replicate columns)
+      │  generated/GSE55763/build/parse_metadata.py   (reconstruct replicate design from GEO series matrix)
+      │  generated/GSE55763/build/extract_betas.sh    (stream-extract the replicate columns)
       ▼
 Cohort inputs:  betas.csv  +  pheno.csv (sample_id, age, female)  +  map.csv (subject → sample_id)
       │  reliage/scoring/score_methylCIPHER.R   (PRIMARY scorer, R)      ─┐
@@ -252,11 +252,11 @@ reproducible from inputs + code. Do not hand-edit generated files.
 | `reliage/scoring/age_accel_icc.py` | age-acceleration ICC companion (optional 4th arg = out path) | canonical |
 | `reliage/scoring/robustness.py` | compression audit / LOSO / outliers / Bland–Altman | canonical |
 | `reliage/scoring/figures.py` | the 5 M1 figures | canonical (code) |
-| `datasets/GSE55763/build/` | dataset-prep scripts (metadata parse, column extract) | canonical |
-| `datasets/GSE55763/metadata/` | `pheno.csv`, `map.csv`, `replicate_sample_ids.txt`, `PROVENANCE.md` | generated (committed) |
-| `datasets/GSE55763/processed/` | `betas.csv` (**gitignored, 596 MB**), `scores.csv`, `scores_pyaging.csv`, `scores_wide.csv` | generated |
-| `datasets/GSE55763/out/` | M1 results (leaderboard, contrasts, RESULTS.md, ROBUSTNESS.md, figures/) | generated (force-added at M1 tag) |
-| `datasets/GSE55763/out_E2/` | E2 results (RESULTS_E2.md, contrasts, robustness/) | generated |
+| `generated/GSE55763/build/` | dataset-prep scripts (metadata parse, column extract) | canonical |
+| `generated/GSE55763/metadata/` | `pheno.csv`, `map.csv`, `replicate_sample_ids.txt`, `PROVENANCE.md` | generated (committed) |
+| `generated/GSE55763/processed/` | `betas.csv` (**gitignored, 596 MB**), `scores.csv`, `scores_pyaging.csv`, `scores_wide.csv` | generated |
+| `generated/GSE55763/out/` | M1 results (leaderboard, contrasts, RESULTS.md, ROBUSTNESS.md, figures/) | generated (force-added at M1 tag) |
+| `generated/GSE55763/out_E2/` | E2 results (RESULTS_E2.md, contrasts, robustness/) | generated |
 | `docs/FOUNDRY_PRINCIPLES.md` | cross-project methodology (P1–P8) | canonical |
 | `docs/tracker.md` | **Current State block is authoritative for what is true now** | canonical |
 | `docs/PIR03-C2/CLAIMS.md` | evidence ledger (the scientific state) | canonical |
@@ -422,7 +422,7 @@ verification before they became false findings (root-cause ledger in
   difference**, not within-subject SD. Do not conflate.
 
 **Reproducibility / provenance traps:**
-- `.gitignore` excludes `datasets/*/processed/*`, `out/`, and `scores*.csv`. The small M1 result
+- `.gitignore` excludes `generated/*/processed/betas.csv`, `out/`, and `scores*.csv`. The small M1 result
   artifacts were **force-added** intentionally so the tag is self-contained; `betas.csv` (596 MB)
   and the GEO gz are deliberately *not* committed. When adding new result artifacts to a milestone,
   force-add the *small* ones and never `betas.csv`.

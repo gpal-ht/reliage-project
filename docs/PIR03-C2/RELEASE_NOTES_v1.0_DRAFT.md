@@ -51,7 +51,7 @@ Full ledger: `CLAIMS.md`. **v1.0 ships only when all five are met** (the fifth i
 - **Engine** (`reliage/`): `icc`, `benchmark`, `contrast`, `detectability`, `selfcheck` (numpy/pandas/scipy only).
 - **Scoring producers** (`reliage/scoring/`): `score_methylCIPHER.R` (primary), `score_pyaging.py`
   (sensitivity), `run_analysis`, `age_accel_icc`, `robustness`, `icc_sensitivity`, `tier3_compare`, `figures`.
-- **Dataset build** (`datasets/GSE55763/build/`): metadata reconstruction + column extraction.
+- **Dataset build** (`generated/GSE55763/build/`): metadata reconstruction + column extraction.
 - **Frozen artifacts**: M1 results + figures, E2 comparison, Tier-3 comparison, provenance.
 - **Docs**: `HANDOVER_v0.3.1.md`, `PIPELINE.md`, `PROTOCOL_FREEZE.md`, `FOUNDRY_PRINCIPLES.md`,
   `REPRODUCTION_PACKAGE.md`, `CLAIMS.md`, and the milestone/experiment records.

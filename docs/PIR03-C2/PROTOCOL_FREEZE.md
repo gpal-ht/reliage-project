@@ -21,7 +21,7 @@ document freezes the *protocol*; it does not declare the *release*.
 | Robustness suite | compression audit, leave-one-subject-out, Bland–Altman, outlier audit | `reliage.scoring.robustness` |
 | Primary scorer | methylCIPHER **@9e8c1e5** (R 4.6.1) — pinned; pyaging = sensitivity | `SCORING_DECISION.md`, `CLOCK_MANIFEST.csv` |
 | Reproduction gate | **tiered (T1 reproduce published stats · T2 independent GEO rebuild · T3 consistency within tolerances)** — ratified | `SCORING_DECISION.md`, `TIER3_PROTOCOL.md` |
-| Anchor dataset | GSE55763 — 36 cross-batch technical-replicate pairs (450K) | `datasets/GSE55763/` |
+| Anchor dataset | GSE55763 — 36 cross-batch technical-replicate pairs (450K) | `generated/GSE55763/` |
 | Versioned Score Table | the **long-form schema** (`sample_id, clock_id, variant, score, unit, + provenance`) is the frozen v1 **contract** | `HANDOVER_v0.3.1.md §8` |
 
 Note: the *normalized* VST spec (metadata.yaml + run_id header + subjects/samples split,

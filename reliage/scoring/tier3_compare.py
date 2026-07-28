@@ -11,8 +11,8 @@ Primary verdict rests on the RESOLVED absolute-difference anchors (Horvath1, Gri
 """
 import os, sys, pandas as pd
 
-out = sys.argv[1] if len(sys.argv) > 1 else "datasets/GSE55763/out"
-t3 = sys.argv[2] if len(sys.argv) > 2 else "datasets/GSE55763/out_tier3"
+out = sys.argv[1] if len(sys.argv) > 1 else "generated/GSE55763/out"
+t3 = sys.argv[2] if len(sys.argv) > 2 else "generated/GSE55763/out_tier3"
 os.makedirs(t3, exist_ok=True)
 
 # --- pinned published anchors (Higgins-Chen 2022; see published_reference_cases.yaml) ---

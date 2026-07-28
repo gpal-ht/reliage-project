@@ -127,7 +127,7 @@ removed.
 
 | Stage | Artifact | Contents |
 |---|---|---|
-| Acquire | `…/Datasets/GSE55763_normalized_betas.txt.gz` | raw 2,711-sample matrix (backup, md5-verified) |
+| Acquire | `…/Datasets/GSE55763/raw/GSE55763_normalized_betas.txt.gz` | raw 2,711-sample matrix (backup, md5-verified) |
 | Prep | `metadata/pheno.csv` | 72 samples: sample_id, age, sex, batch, subject |
 | Prep | `metadata/map.csv` | subject → sample_id (36 pairs) |
 | Prep | `metadata/replicate_sample_ids.txt` | the 72 IDs extracted from the matrix |
@@ -190,33 +190,33 @@ and Zenodo `10.5281/zenodo.19455622` (PC reference).
 
 ```bash
 # 1. replicate design from the series matrix
-python datasets/GSE55763/build/parse_metadata.py \
-       GSE55763_series_matrix.txt.gz  datasets/GSE55763/metadata
+python generated/GSE55763/build/parse_metadata.py \
+       GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 
 # 2. extract the 72 replicate beta columns from the 9.7 GB matrix
-bash datasets/GSE55763/build/extract_betas.sh \
-       datasets/GSE55763/metadata/replicate_sample_ids.txt \
+bash generated/GSE55763/build/extract_betas.sh \
+       generated/GSE55763/metadata/replicate_sample_ids.txt \
        /path/to/GSE55763_normalized_betas.txt.gz \
-       datasets/GSE55763/processed/betas.csv
+       generated/GSE55763/processed/betas.csv
 
 # 3. score (methylCIPHER engine) — pin the commit inside the R script first
 Rscript reliage/scoring/score_methylCIPHER.R \
-       datasets/GSE55763/processed/betas.csv \
-       datasets/GSE55763/metadata/pheno.csv \
-       datasets/GSE55763/processed/scores.csv \
+       generated/GSE55763/processed/betas.csv \
+       generated/GSE55763/metadata/pheno.csv \
+       generated/GSE55763/processed/scores.csv \
        /path/to/PCClocks_data.qs2
 
 # 4. reliability analysis (reliage engine) -> RESULTS.md
 python -m reliage.scoring.run_analysis \
-       datasets/GSE55763/processed/scores.csv \
-       datasets/GSE55763/metadata/map.csv \
-       --out datasets/GSE55763/out
+       generated/GSE55763/processed/scores.csv \
+       generated/GSE55763/metadata/map.csv \
+       --out generated/GSE55763/out
 
 # 5. age-acceleration ICC (companion)
 python -m reliage.scoring.age_accel_icc \
-       datasets/GSE55763/processed/scores.csv \
-       datasets/GSE55763/metadata/map.csv \
-       datasets/GSE55763/metadata/pheno.csv
+       generated/GSE55763/processed/scores.csv \
+       generated/GSE55763/metadata/map.csv \
+       generated/GSE55763/metadata/pheno.csv
 ```
 
 ---

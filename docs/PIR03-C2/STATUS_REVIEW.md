@@ -246,7 +246,7 @@ runnable download tooling**; the bytes are pulled where the data will live.
 
 Created scaffold (`reliage/datasets/`):
 ```
-datasets/
+generated/
   README.md                     (index)
   pcclocks_example/  raw/ processed/ metadata/  README.md
   GSE55763/          raw/ processed/ metadata/  README.md

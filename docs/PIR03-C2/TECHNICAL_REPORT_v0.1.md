@@ -69,7 +69,7 @@ aging biology, causality, or intervention response.
 - **Functions:** `calcHorvath1`, `calcHannum`, `calcPhenoAge`, `calcGrimAgeV1`;
   PC via `calcPCClocks`. Mean imputation (methylCIPHER PC default).
 - **CpG coverage (gate):** Horvath1/Hannum/PhenoAge/PC = 100%; **GrimAge = 91%** (97
-  imputed). Full provenance: `datasets/GSE55763/metadata/PROVENANCE.md`.
+  imputed). Full provenance: `generated/GSE55763/metadata/PROVENANCE.md`.
 - Output: the Versioned Score Table `processed/scores.csv` (576 rows, per-row
   provenance). reliage consumes only this table + the replicate map — it never sees
   betas or clock formulas.
@@ -104,7 +104,7 @@ PC removes **87–96%** of within-subject technical variance (point estimates; t
 upper bounds imply a worst-case reduction near 67% for Hannum, ~74% for Horvath1);
 PhenoAge (the noisiest original) benefits most. Joint verdict: **supported, 4/4**.
 
-![Figure 1 — variance-ratio forest plot](../../datasets/GSE55763/out/figures/1_forest.png)
+![Figure 1 — variance-ratio forest plot](../../generated/GSE55763/out/figures/1_forest.png)
 
 *Figure 1. Within-subject variance ratio (PC/original) with paired-bootstrap 95% CIs; null at 1.*
 
@@ -124,7 +124,7 @@ Practical reading: with original PhenoAge an individual's value must change **>7
 to exceed measurement noise; with PCPhenoAge, **1.46 yr**. Even the already-excellent
 GrimAge halves its detectable-change threshold.
 
-![Figure 2 — paired replicate-error reduction](../../datasets/GSE55763/out/figures/2_paired_error.png)
+![Figure 2 — paired replicate-error reduction](../../generated/GSE55763/out/figures/2_paired_error.png)
 
 *Figure 2. Per-subject |replicate difference|, original → PC, by clock family.*
 
@@ -146,7 +146,7 @@ PC advantage widens** under age acceleration — the metric studies actually use
 
 ## 9 · Robustness analyses
 
-Full detail: `datasets/GSE55763/out/ROBUSTNESS.md`.
+Full detail: `generated/GSE55763/out/ROBUSTNESS.md`.
 
 **Signal preservation vs compression.** Define two metrology quantities on each pair:
 
@@ -171,7 +171,7 @@ Chronological-age association is preserved (GrimAge improves, r 0.855→0.915) a
 ranking is preserved (Spearman 0.87–0.96). A modest between-subject compression
 (SPR 0.74–0.85, i.e. ~15–26% loss) is present but far too small to explain the gain.
 
-![Figure 3 — signal preservation vs noise reduction](../../datasets/GSE55763/out/figures/4_signal_vs_noise.png)
+![Figure 3 — signal preservation vs noise reduction](../../generated/GSE55763/out/figures/4_signal_vs_noise.png)
 
 *Figure 3. Between-subject signal retained vs within-subject noise removed. The dashed
 line is equal proportional shrinkage of signal and noise (a null model of simple linear
@@ -194,12 +194,12 @@ agreement tighten 2.5–5×. **No clear evidence of magnitude-dependent absolute
 detected** (|difference|–mean correlation non-significant for all clocks, p ≥ 0.09; a
 diagnostic, not a definitive homoscedasticity test).
 
-![Figure 4 — Bland–Altman](../../datasets/GSE55763/out/figures/3_bland_altman.png)
+![Figure 4 — Bland–Altman](../../generated/GSE55763/out/figures/3_bland_altman.png)
 
 *Figure 4. Bland–Altman panels, original (top) vs PC (bottom): mean vs within-pair
 difference, with bias and 95% limits of agreement.*
 
-![Figure 5 — leave-one-subject-out influence](../../datasets/GSE55763/out/figures/5_loso.png)
+![Figure 5 — leave-one-subject-out influence](../../generated/GSE55763/out/figures/5_loso.png)
 
 *Figure 5. Variance ratio by omitted subject; every value stays far below 1.*
 
@@ -253,13 +253,13 @@ variation); this study does not probe the biological content of the removed vari
 Full pipeline and commands: `docs/PIR03-C2/PIPELINE.md`. In brief, from the repo root:
 
 ```bash
-python datasets/GSE55763/build/parse_metadata.py GSE55763_series_matrix.txt.gz datasets/GSE55763/metadata
-bash   datasets/GSE55763/build/extract_betas.sh   datasets/GSE55763/metadata/replicate_sample_ids.txt  <betas.txt.gz>  datasets/GSE55763/processed/betas.csv
-Rscript reliage/scoring/score_methylCIPHER.R       datasets/GSE55763/processed/betas.csv  datasets/GSE55763/metadata/pheno.csv  datasets/GSE55763/processed/scores.csv  <PCClocks_data.qs2>
-python -m reliage.scoring.run_analysis  datasets/GSE55763/processed/scores.csv datasets/GSE55763/metadata/map.csv --out datasets/GSE55763/out
-python -m reliage.scoring.age_accel_icc datasets/GSE55763/processed/scores.csv datasets/GSE55763/metadata/map.csv datasets/GSE55763/metadata/pheno.csv
-python -m reliage.scoring.robustness    datasets/GSE55763/processed/scores.csv datasets/GSE55763/metadata/map.csv datasets/GSE55763/metadata/pheno.csv datasets/GSE55763/out/robustness
-python -m reliage.scoring.figures       datasets/GSE55763/out datasets/GSE55763/out/figures
+python generated/GSE55763/build/parse_metadata.py GSE55763_series_matrix.txt.gz generated/GSE55763/metadata
+bash   generated/GSE55763/build/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <betas.txt.gz>  generated/GSE55763/processed/betas.csv
+Rscript reliage/scoring/score_methylCIPHER.R       generated/GSE55763/processed/betas.csv  generated/GSE55763/metadata/pheno.csv  generated/GSE55763/processed/scores.csv  <PCClocks_data.qs2>
+python -m reliage.scoring.run_analysis  generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv --out generated/GSE55763/out
+python -m reliage.scoring.age_accel_icc generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv generated/GSE55763/metadata/pheno.csv
+python -m reliage.scoring.robustness    generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv generated/GSE55763/metadata/pheno.csv generated/GSE55763/out/robustness
+python -m reliage.scoring.figures       generated/GSE55763/out generated/GSE55763/out/figures
 ```
 
 ## 14 · Claim record and evidence disposition

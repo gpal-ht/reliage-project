@@ -14,7 +14,7 @@ from reliage.contrast import run_paired_contrasts
 
 scores_csv, map_csv, pheno_csv = sys.argv[1], sys.argv[2], sys.argv[3]
 # optional 4th arg = output CSV path (default keeps M1 behaviour / reproduction intact)
-out_csv = sys.argv[4] if len(sys.argv) > 4 else "datasets/GSE55763/out/leaderboard_ageaccel.csv"
+out_csv = sys.argv[4] if len(sys.argv) > 4 else "generated/GSE55763/out/leaderboard_ageaccel.csv"
 wide = load_scores_wide(scores_csv)               # index=sample_id, cols=clock labels
 groups = load_map(map_csv)
 pheno = pd.read_csv(pheno_csv).set_index("sample_id")

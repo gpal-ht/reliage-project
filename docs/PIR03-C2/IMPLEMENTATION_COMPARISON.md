@@ -14,8 +14,8 @@ calibration offset) and narrower than any claim beyond these clocks/dataset.
 > same published Higgins-Chen PC coefficients), so the originals carry the weight of the
 > implementation-robustness claim.
 
-M1 (`v0.3.1-scientific-baseline`) is untouched. E2 outputs live in `datasets/GSE55763/out_E2/`;
-pyaging score table in `datasets/GSE55763/processed/scores_pyaging.csv`.
+M1 (`v0.3.1-scientific-baseline`) is untouched. E2 outputs live in `generated/GSE55763/out_E2/`;
+pyaging score table in `generated/GSE55763/processed/scores_pyaging.csv`.
 
 ## Prespecified criteria — all met
 

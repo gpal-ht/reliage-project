@@ -1,8 +1,15 @@
 # Public datasets for the reliage reliability experiment
 
 Registry of the public datasets this benchmark runs on. Download them with
-`./download_data.sh` (runs where the data should live — not in an ephemeral
-cloud sandbox). Sizes are approximate; methylation matrices are large.
+`./download_data.sh` into the **shared external data root** — never into the repo.
+Sizes are approximate; methylation matrices are large.
+
+**Data root.** Datasets live under `$LONGEVITY_DATA_ROOT` (a single external location
+reused across longevity projects), default `C:\Ambitious Projects\Longevity Project\Datasets`.
+Set the env var (or pass `--data-root DIR`) to point elsewhere. Only the small
+**generated** summaries (reconstructed metadata, the Versioned Score Table, analysis
+outputs) are committed — in the repo's `generated/` folder, not here. See
+[`generated/README.md`](../generated/README.md).
 
 ## Technical reliability (same sample measured twice)
 
@@ -19,14 +26,22 @@ cloud sandbox). Sizes are approximate; methylation matrices are large.
 | **Sleep-dep companion** | GSE49065 | GEO | within-subject timepoints | blood | med | public |
 | **Diurnal (within-day)** | TBD | GEO (behind Koncevičius 2024 / 2025 daily-rhythm papers) | hours | blood | med | public — **accession still to pin**; best scientific fit |
 
-## Layout after download
+## Layout
+
+Source data (external, shared) vs generated summaries (in the repo):
 
 ```
-data/
-  GSE55763/           series matrix + normalized betas     (technical, full)
-  E-MTAB-4664/        processed methylation + sample meta   (biological, ~1 day)
-  GSE49065/           ...                                   (biological)
-  E-MTAB-7309/        ...                                   (technical, SATSA)
+$LONGEVITY_DATA_ROOT/                 (external — the dataset SOURCE, shared across repos)
+  GSE55763/raw/       GSE55763_normalized_betas.txt.gz (+ md5), series matrix
+  E-MTAB-4664/raw/    processed methylation + sample meta   (biological, ~1 day)
+  GSE49065/raw/ ...                                          (biological)
+  E-MTAB-7309/raw/ ...                                       (technical, SATSA)
+
+<repo>/generated/                     (in git — GENERATED summaries, not the dataset)
+  GSE55763/build/     parse_metadata.py, extract_betas.sh   (the generators)
+  GSE55763/metadata/  map.csv, pheno.csv, replicate_sample_ids.txt, PROVENANCE.md
+  GSE55763/processed/ scores*.csv (committed) · betas.csv (gitignored, rebuilt)
+  GSE55763/out*/      analysis results (committed)
 ```
 
 ## From download → reliage

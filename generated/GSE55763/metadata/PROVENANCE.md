@@ -20,7 +20,10 @@ Run: 2026-07-24. This record is mandatory; no score is valid without it.
 - source file: `GSE55763_normalized_betas.txt.gz`
   (`https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/suppl/`)
 - size: **10,378,167,001 bytes** · **md5 `64654afe3a8898641c3e321c5a5204df`**
-- backup retained: `C:\Ambitious Projects\Longevity Project\Datasets\GSE55763_normalized_betas.txt.gz`
+- **storage — external, NOT the repo:** the source lives under `$LONGEVITY_DATA_ROOT`
+  (default `C:\Ambitious Projects\Longevity Project\Datasets`) at
+  `GSE55763\raw\GSE55763_normalized_betas.txt.gz`. Only generated summaries
+  (this record, `map`/`pheno`/`replicate_sample_ids`, `scores*.csv`, `out/`) are in the repo.
 - cohort: **72 technical-replicate samples = 36 individuals × 2 batches** (group 1 / group 2),
   identified from the series-matrix `Sample_description`. Every subject has exactly 2 measurements
   (0 malformed). The two measurements were processed in **separate batches by design** (cross-batch
@@ -49,7 +52,7 @@ Run: 2026-07-24. This record is mandatory; no score is valid without it.
 - transformation + output unit: **years** (all 4 locked pairs; no DunedinPACE/DNAmTL in this run,
   so no cross-unit aggregation)
 - GrimAge phenotype inputs used: **age + sex (Female)** from GEO series-matrix metadata
-- score table: `datasets/GSE55763/processed/scores.csv` (576 rows = 72 × 4 clocks × 2 variants)
+- score table: `generated/GSE55763/processed/scores.csv` (576 rows = 72 × 4 clocks × 2 variants)
 
 ## Notes / known issues
 - **GrimAge 91% coverage** (97 imputed CpGs) — above typical gates but the lowest of the five; note

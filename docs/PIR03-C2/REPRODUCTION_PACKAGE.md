@@ -51,7 +51,7 @@ git checkout v0.3.1-scientific-baseline    # frozen reference; or 'develop' for 
 ```
 Note: `betas.csv` and large data are intentionally NOT in git — you rebuild them from GEO (that is
 the point of *independent* reproduction). Committed result artifacts are under
-`datasets/GSE55763/out/` (M1), `out_E2/` (E2), `out_tier3/` — your regenerated values should match.
+`generated/GSE55763/out/` (M1), `out_E2/` (E2), `out_tier3/` — your regenerated values should match.
 
 ---
 
@@ -82,9 +82,9 @@ Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 
 ### 5.1 Rebuild the cohort (no scoring yet)
 ```bash
-python datasets/GSE55763/build/parse_metadata.py  GSE55763_series_matrix.txt.gz  datasets/GSE55763/metadata
+python generated/GSE55763/build/parse_metadata.py  GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 #  EXPECT: "replicate samples: 72  groups: [1, 2]  individuals: 36 ... malformed: 0"
-bash   datasets/GSE55763/build/extract_betas.sh   datasets/GSE55763/metadata/replicate_sample_ids.txt  <path>/GSE55763_normalized_betas.txt.gz  datasets/GSE55763/processed/betas.csv
+bash   generated/GSE55763/build/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <path>/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
 #  EXPECT: "matched 72 beta columns" ; ~473,864 CpG rows, 73 columns
 ```
 Verify your `metadata/pheno.csv` and `map.csv` are byte-identical to the committed ones
@@ -100,20 +100,20 @@ install.packages(c("stringfish","qs2"), type="source")
 
 ### 5.3 Score → Versioned Score Table
 ```bash
-Rscript reliage/scoring/score_methylCIPHER.R  datasets/GSE55763/processed/betas.csv \
-        datasets/GSE55763/metadata/pheno.csv  datasets/GSE55763/processed/scores.csv  <path>/PCClocks_data.qs2
+Rscript reliage/scoring/score_methylCIPHER.R  generated/GSE55763/processed/betas.csv \
+        generated/GSE55763/metadata/pheno.csv  generated/GSE55763/processed/scores.csv  <path>/PCClocks_data.qs2
 #  EXPECT: "wrote 576 score rows ... originals + PC" ; GrimAge coverage ~91%, others 100%; 4 all-NA CpGs dropped
 ```
 
 ### 5.4 Analyze (reliage engine)
 ```bash
 python -m reliage.selfcheck                                   # 4 gates must pass
-python -m reliage.scoring.run_analysis   datasets/GSE55763/processed/scores.csv  datasets/GSE55763/metadata/map.csv  --out out_repro
-python -m reliage.scoring.age_accel_icc  datasets/GSE55763/processed/scores.csv  datasets/GSE55763/metadata/map.csv  datasets/GSE55763/metadata/pheno.csv  out_repro/leaderboard_ageaccel.csv
-python -m reliage.scoring.robustness     datasets/GSE55763/processed/scores.csv  datasets/GSE55763/metadata/map.csv  datasets/GSE55763/metadata/pheno.csv  out_repro/robustness
+python -m reliage.scoring.run_analysis   generated/GSE55763/processed/scores.csv  generated/GSE55763/metadata/map.csv  --out out_repro
+python -m reliage.scoring.age_accel_icc  generated/GSE55763/processed/scores.csv  generated/GSE55763/metadata/map.csv  generated/GSE55763/metadata/pheno.csv  out_repro/leaderboard_ageaccel.csv
+python -m reliage.scoring.robustness     generated/GSE55763/processed/scores.csv  generated/GSE55763/metadata/map.csv  generated/GSE55763/metadata/pheno.csv  out_repro/robustness
 python -m reliage.scoring.tier3_compare  out_repro  out_repro/tier3     # Recommended (B)
 ```
-Compare `out_repro/` to the committed `datasets/GSE55763/out/` and the §6 tolerances.
+Compare `out_repro/` to the committed `generated/GSE55763/out/` and the §6 tolerances.
 
 ## 5x. Reproduce — Extended (C, pyaging)
 In a **separate Python 3.9–3.13** env: `pip install pyaging`, then
@@ -192,7 +192,7 @@ report is an equally valid, recordable outcome.
 
 ## 9. What independence requires
 - Do the run yourself, from the committed repo + public data, without author assistance.
-- Do not use `datasets/GSE55763/processed/betas.csv` or `scores.csv` if the author sent them — rebuild
+- Do not use `generated/GSE55763/processed/betas.csv` or `scores.csv` if the author sent them — rebuild
   from GEO. (They are gitignored precisely so a clone forces a genuine rebuild.)
 - Report what you actually observed, including friction — the goal is truth about reproducibility,
   not a green checkmark.

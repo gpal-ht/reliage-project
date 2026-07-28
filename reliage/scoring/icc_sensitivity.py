@@ -14,7 +14,7 @@ from reliage.benchmark import build_replicate_matrix
 from reliage.icc import compute_icc, koo_li_band
 
 scores_csv, map_csv = sys.argv[1], sys.argv[2]
-out_csv = sys.argv[3] if len(sys.argv) > 3 else "datasets/GSE55763/out/icc_sensitivity.csv"
+out_csv = sys.argv[3] if len(sys.argv) > 3 else "generated/GSE55763/out/icc_sensitivity.csv"
 wide = load_scores_wide(scores_csv)
 groups = load_map(map_csv)
 labels = [c for c in wide.columns]

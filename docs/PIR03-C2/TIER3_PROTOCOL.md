@@ -43,7 +43,7 @@ published per-clock figures against the paper/supplement; if unconfirmable, the 
 remain "text-extracted" and the verdict leans on the RESOLVED absolute-difference statistics.
 
 ## Metrics reliage will compute (from the FROZEN M1 outputs)
-From `datasets/GSE55763/out/` (M1, tag `v0.3.1-scientific-baseline`) and its
+From `generated/GSE55763/out/` (M1, tag `v0.3.1-scientific-baseline`) and its
 `robustness/pair_diffs.csv`:
 - per original clock: **median** and **max** absolute replicate difference;
 - per PC clock: median / max / fraction ≤ 1.5 yr absolute replicate difference;
@@ -73,7 +73,7 @@ Set on principled measurement grounds, not reverse-engineered from M1:
 ## Deliverables
 1. `TIER3_PROTOCOL.md` (this document, locked).
 2. `TIER3_COMPARISON.md` — reliage vs published, per metric, with pass/fail against tolerance.
-3. `datasets/GSE55763/out_tier3/` — the computed reliage-side numbers (median/max \|Δ\| table).
+3. `generated/GSE55763/out_tier3/` — the computed reliage-side numbers (median/max \|Δ\| table).
 4. CLAIMS #7 status update (Supported / Partial / Not-met, scoped).
 5. **If PASS/PARTIAL:** ratify the tiered reproduction gate into `SCORING_DECISION.md`
    (the tracked follow-up: T1 reproduce published stats ✓ · T2 independent GEO rebuild ✓ ·

@@ -6,25 +6,25 @@ dist/
 .pytest_cache/
 .venv/
 
-# Downloaded data (fetch where the data lives; never commit) — keep scaffold + READMEs
-data/gse55763/
-data/*.parquet
-data/*.csv
-datasets/*/raw/*
-datasets/*/processed/*
-datasets/*/metadata/*
-!datasets/*/raw/.gitkeep
-!datasets/*/processed/.gitkeep
-!datasets/*/metadata/.gitkeep
-!datasets/*/README.md
+# --- Data & generated artifacts ---
+# The dataset SOURCE (raw downloads) lives OUTSIDE the repo, under the shared
+# $LONGEVITY_DATA_ROOT (see data/DATASETS.md). Only small GENERATED summaries are
+# committed, under generated/. Large or easily-rebuilt derivatives are NOT committed.
+# (gitignore has no inline comments — keep patterns on their own lines.)
 
-# Analysis outputs
-out/
-reliage_out/
-*.RData
-scores*.csv
-!examples/*.csv
+# raw source is external — never in the repo
+generated/*/raw/*
+# 596 MB derivative — rebuilt from the external gz, never committed
+generated/*/processed/betas.csv
 
-# downloaded reference repo + stray archive
-datasets/pcclocks_example/PC-Clocks/
+# Ad-hoc / reproduction run output dirs (repo-root only).
+# The committed M1/E2 results under generated/*/out* ARE tracked and kept.
+/out/
+/reliage_out/
+/out_repro/
+
+# Legacy download dir + stray archives
+/data/gse55763/
+/data/*.parquet
+/data/*.csv
 *.tar.gz

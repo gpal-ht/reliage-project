@@ -2,7 +2,7 @@
 
 Protocol requires ICC(2,1) as primary with ICC(1,1) and ICC(3,1) reported as sensitivity. This
 confirms the M1 reliability conclusion is not an artifact of the ICC form. Computed on the frozen
-M1 score table via `reliage.scoring.icc_sensitivity`; values in `datasets/GSE55763/out/icc_sensitivity.csv`.
+M1 score table via `reliage.scoring.icc_sensitivity`; values in `generated/GSE55763/out/icc_sensitivity.csv`.
 
 ## Result
 
@@ -32,4 +32,4 @@ M1 score table via `reliage.scoring.icc_sensitivity`; values in `datasets/GSE557
 
 ## Disposition
 Strengthens claims #3–#5 (the M1 reliability finding is stable across ICC forms). Not a new claim.
-Reproduce: `python -m reliage.scoring.icc_sensitivity datasets/GSE55763/processed/scores.csv datasets/GSE55763/metadata/map.csv datasets/GSE55763/out/icc_sensitivity.csv`.
+Reproduce: `python -m reliage.scoring.icc_sensitivity generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv generated/GSE55763/out/icc_sensitivity.csv`.
