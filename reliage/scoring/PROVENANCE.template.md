@@ -2,7 +2,7 @@
 
 Copy per scoring run into the dataset's `metadata/`. No score is valid without this.
 
-- dataset: ______________ (e.g. GSE55763 GEO rebuild | pcclocks_example)
+- dataset: ______________ (e.g. GSE55763 GEO rebuild)
 - scorer: methylCIPHER (PRIMARY) | pyaging (SENSITIVITY)
 - repository owner + URL: HigginsChenLab / https://github.com/HigginsChenLab/methylCIPHER
 - **exact commit hash:** ______________ (`git rev-parse HEAD`)

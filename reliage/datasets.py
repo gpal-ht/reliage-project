@@ -8,9 +8,8 @@ replicate-bearing dataset is required.
 Confirmed public anchor dataset
 -------------------------------
 **GSE55763** (Lehne et al., Genome Biol. 2015) — Illumina HumanMethylation450,
-2,711 samples of which **36 are measured in duplicate**. Public since 2015,
-already used as the example replicate set shipped with PC-Clocks. This is the
-recommended first real dataset for the benchmark.
+2,711 samples of which **36 are measured in duplicate**. Public since 2015. This
+is the recommended first real dataset for the benchmark.
 
 Other public options to widen coverage later: SATSA (ArrayExpress E-MTAB-7309)
 and EPIC-array reproducibility series in the EPIC v2 validation literature.

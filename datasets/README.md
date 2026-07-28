@@ -8,7 +8,6 @@ and known issues.
 
 | Dir | Accession | Tier | Role |
 |---|---|---|---|
-| `pcclocks_example/` | — (GitHub) | 1 | fast-start debug path (Lehne subset) |
 | `GSE55763/` | GSE55763 | 1 | canonical technical-replicate anchor (GEO rebuild) |
 
 Tier 2/3 (biological/longitudinal — future milestones): E-MTAB-4664 (Tier D + normal

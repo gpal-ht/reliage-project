@@ -18,14 +18,13 @@ GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE55763
 
 ## Preprocessing requirements
 Obtain normalized betas; subset to the 72 replicate samples; record normalization/
-pipeline exactly. Compare the independently-derived matrix to the pcclocks_example
-matrix and document any differences (this comparison is itself an acceptance test).
+pipeline exactly.
 
 ## Replicate mapping requirements
 Build `subject → [measurement_1, measurement_2]` for the 36 pairs. **Executable audit
 (VAL-DATA-AUDIT-GSE55763):** verify unique biological samples, assay measurements,
-complete pairs, exclusions, and whether the example RData contains all GEO replicates —
-establish "36 samples measured in duplicate" from data, not prose.
+complete pairs, and exclusions — establish "36 samples measured in duplicate" from
+data, not prose.
 
 ## Known issues
 - Cross-batch by design → estimates reliability under that specific setup.

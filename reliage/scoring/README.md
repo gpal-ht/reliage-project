@@ -26,11 +26,10 @@ not `phenoage`; GrimAge reads age/female as features.)
 
 ## Status (canonical: `docs/tracker.md`, `docs/PIR03-C2/CLAIMS.md`)
 - **M1 done** — GSE55763 GEO cohort (36 replicate pairs) scored with pinned methylCIPHER →
-  supported 4/4. **The author-prepared "fast path" (Box `Example_PCClock_Data.RData`) is
-  UNAVAILABLE (removed); M1 used the GEO canonical path directly.**
+  supported 4/4, on the canonical GEO path.
 - **E2 done** — pyaging sensitivity check → implementation-robust.
-- **Pending** — formal Tier-3 published-reference comparison. The fast-path↔GEO tolerance gate in
-  `SCORING_DECISION.md` is superseded by a tiered reproduction gate, to be ratified at Tier-3.
+- **Pending** — formal Tier-3 published-reference comparison, ratified via a tiered
+  reproduction gate (`SCORING_DECISION.md`).
 
 ## The score table contract (long form)
 `sample_id, clock_id, variant, score, unit, implementation, repo_url, commit,

@@ -8,8 +8,7 @@ cloud sandbox). Sizes are approximate; methylation matrices are large.
 
 | Name | Accession | Source | Array | Replicates | ~Size | License / access |
 |---|---|---|---|---|---|---|
-| **PC-Clocks example** | — | GitHub `MorganLevineLab/PC-Clocks` | 450K | Lehne replicates, pre-subset | small (MB) | open (repo) — **fastest start** |
-| **Lehne 2015 (full)** | GSE55763 | GEO | 450K | 36 duplicate pairs (of 2,711) | large (GB) | public |
+| **Lehne 2015 (full)** | GSE55763 | GEO | 450K | 36 duplicate pairs (of 2,711) | large (GB) | public — **the v1 anchor** |
 | **SATSA** | E-MTAB-7309 | ArrayExpress | — | longitudinal/replicate | large | public |
 
 ## Biological reliability (same person, repeat draws over a short interval)
@@ -24,7 +23,6 @@ cloud sandbox). Sizes are approximate; methylation matrices are large.
 
 ```
 data/
-  pcclocks_example/   Example_PCClock_Data.RData          (technical, fast start)
   GSE55763/           series matrix + normalized betas     (technical, full)
   E-MTAB-4664/        processed methylation + sample meta   (biological, ~1 day)
   GSE49065/           ...                                   (biological)
