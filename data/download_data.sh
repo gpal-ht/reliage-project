@@ -25,19 +25,29 @@ fetch() { echo ">> $1"; }
 
 # --- 1. GSE55763 (Lehne 2015 full; 450K; 36 duplicate pairs) ------------------
 get_gse55763() {
-  fetch "GSE55763 (technical; LARGE, several GB)"
-  mkdir -p "$DATA_ROOT/GSE55763/raw"
-  if [ -f "$DATA_ROOT/GSE55763/raw/GSE55763_normalized_betas.txt.gz" ]; then
-    echo "   already present at $DATA_ROOT/GSE55763/raw/ — skipping download"
-    return
+  fetch "GSE55763 (technical; betas LARGE + series matrix small)"
+  raw="$DATA_ROOT/GSE55763/raw"
+  mkdir -p "$raw"
+  # Two SOURCE files, in two different GEO dirs; fetch each independently (skip if present).
+  # (a) normalized beta matrix (~9.7 GB) — the DATA — lives under the series suppl dir:
+  if [ -f "$raw/GSE55763_normalized_betas.txt.gz" ]; then
+    echo "   betas already present — skipping"
+  else
+    wget -r -np -nH --cut-dirs=6 -R "index.html*" \
+      "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/suppl/" \
+      -P "$raw/" || true
   fi
-  # Supplementary files (normalized betas etc.) live under the series suppl dir:
-  wget -r -np -nH --cut-dirs=6 -R "index.html*" \
-    "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/suppl/" \
-    -P "$DATA_ROOT/GSE55763/raw/" || true
-  echo "   -> normalized beta matrix under $DATA_ROOT/GSE55763/raw/"
+  # (b) series matrix (~50 KB) — the sample METADATA / replicate design (Stage 2) — lives
+  #     under the series matrix dir. Needed to rebuild map.csv / pheno.csv.
+  if [ -f "$raw/GSE55763_series_matrix.txt.gz" ]; then
+    echo "   series matrix already present — skipping"
+  else
+    wget -P "$raw/" \
+      "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/matrix/GSE55763_series_matrix.txt.gz" || true
+  fi
+  echo "   -> beta matrix + series matrix under $raw/"
   # Python alternative:
-  #   python -c "import GEOparse; GEOparse.get_GEO('GSE55763', destdir='$DATA_ROOT/GSE55763/raw')"
+  #   python -c "import GEOparse; GEOparse.get_GEO('GSE55763', destdir='$raw')"
 }
 
 # --- 2. E-MTAB-4664 (sleep deprivation; biological ~1 day; blood) -------------

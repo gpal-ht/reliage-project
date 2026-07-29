@@ -62,8 +62,11 @@ results in git history, under the pre-rename `datasets/GSE55763/` path).
 - **Methylation betas (9.7 GB):** `GSE55763_normalized_betas.txt.gz` from
   `https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/suppl/`.
   **Expected md5: `64654afe3a8898641c3e321c5a5204df`** — verify before proceeding.
-- **Series matrix (~50 KB, replicate design):** `GSE55763_series_matrix.txt.gz` from
-  `https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/matrix/`.
+- **Series matrix (50,302 bytes, replicate design + phenotype):** `GSE55763_series_matrix.txt.gz`
+  from `https://ftp.ncbi.nlm.nih.gov/geo/series/GSE55nnn/GSE55763/matrix/` (observed md5
+  `695e35c77f46fb6b8e34c82a7707258b`; GEO may regenerate the header, so the durable check is that
+  `parse_metadata.py` reproduces `map.csv`/`pheno.csv` byte-identically). Both this and the betas gz
+  are fetched by `data/download_data.sh gse55763` into `$LONGEVITY_DATA_ROOT/GSE55763/raw/`.
 - **PC reference (2 GB):** `PCClocks_data.qs2` — `download_methylCIPHER(clocks="PCClocks",
   source="zenodo")` (needs the R `zen4R` package) or the direct Zenodo file for the DOI above.
 
