@@ -86,7 +86,7 @@ Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 
 ### 5.1 Rebuild the cohort (no scoring yet)
 ```bash
-python tools/GSE55763/parse_metadata.py  GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
+python tools/GSE55763/parse_metadata.py  $LONGEVITY_DATA_ROOT/GSE55763/raw/GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 #  EXPECT: "replicate samples: 72  groups: [1, 2]  individuals: 36 ... malformed: 0"
 bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <path>/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
 #  EXPECT: "matched 72 beta columns" ; ~473,864 CpG rows, 73 columns

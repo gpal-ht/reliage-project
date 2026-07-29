@@ -192,7 +192,7 @@ and Zenodo `10.5281/zenodo.19455622` (PC reference).
 ```bash
 # 1. replicate design from the series matrix
 python tools/GSE55763/parse_metadata.py \
-       GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
+       $LONGEVITY_DATA_ROOT/GSE55763/raw/GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 
 # 2. extract the 72 replicate beta columns from the 9.7 GB matrix
 bash tools/GSE55763/extract_betas.sh \
