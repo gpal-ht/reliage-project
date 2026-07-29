@@ -158,15 +158,15 @@ python tools/GSE55763/parse_metadata.py \
 **Execution flow**
 ```
 parse_metadata.py
-   ↓ read gzip, keep "!Sample_" lines                     :17-26
-   ↓ pull !Sample_title / _geo_accession / _description   :28
-   ↓ regex the pairing key on _description                :41,45
-   ↓ Sentrix barcode from title                           :38-39
-   ↓ sort by (indiv, group); pairing audit                :52,68-69
-   ↓ write pheno.csv / map.csv / replicate_sample_ids.txt :56-71
+   ↓ read gzip, keep "!Sample_" lines                     :38-47
+   ↓ pull !Sample_title / _geo_accession / _description   :59
+   ↓ regex the pairing key on _description                :72,75
+   ↓ Sentrix barcode from title                           :69-70
+   ↓ sort by (indiv, group); pairing audit                :83,93-96
+   ↓ write pheno.csv / map.csv / replicate_sample_ids.txt :106-117
 ```
 
-**The pairing key** — this single regex is what selects the 72 (`parse_metadata.py:41`):
+**The pairing key** — this single regex is what selects the 72 (`parse_metadata.py:72`):
 ```python
 pat = re.compile(r"Technical replicate group (\d+), sample (\d+)")
 # group 1 = batch (1 or 2)  ;  group 2 = subject index
@@ -175,7 +175,7 @@ if not m: continue        # non-replicate samples are skipped here
 ```
 Samples whose `!Sample_description` matches become the cohort; group 1 is the
 **batch**, group 2 the **subject**. The Sentrix barcode (e.g. `7786915023_R02C02`)
-is pulled from the title by `sentrix()` (`:38-39`, regex `([0-9]{8,}_R\d+C\d+)`) and
+is pulled from the title by `sentrix()` (`:69-70`, regex `([0-9]{8,}_R\d+C\d+)`) and
 becomes the `sample_id` used everywhere downstream.
 
 **Data transformation**
@@ -194,12 +194,16 @@ pheno.csv (72 rows)  ·  map.csv (72 rows = 36 subject→sample pairs)  ·  repl
 - `map.csv` — header `subject,sample_id`; subject label `indiv_{NN}` (`:65`).
 - `replicate_sample_ids.txt` — the 72 Sentrix ids, one per line (the input to Stage 3).
 
-**Pairing audit** (`parse_metadata.py:68-69`) — the correctness gate:
+**Pairing audit** (`parse_metadata.py:93-96`) — a hard correctness gate that refuses to
+write a broken design:
 ```python
 bad = {k: v for k, v in pairs.items() if len(v) != 2}
-print(f"subjects: {len(pairs)} | malformed (not exactly 2 measurements): {len(bad)}")
+if bad:
+    sys.exit(f"Malformed replicate design: {len(bad)} subject(s) without exactly 2 measurements ...")
 ```
-Result: **36 subjects, 0 malformed** — every subject has exactly 2 measurements.
+Result: **36 subjects, 0 malformed** — every subject has exactly 2 measurements. (It also
+exits on 0 replicate descriptions and warns if the count isn't the expected 72 / 36 — guards
+added once the series matrix became an external, non-guaranteed source.)
 
 **Debugging — Stage 2**
 
@@ -322,7 +326,7 @@ IMPUTATION <- "mean (methylCIPHER default: PC clocks mean-impute missing clock C
 GRIMAGE_VARIANT <- "V1"   # LOCKED: original GrimAge = V1, paired with PCGrimAge
 ```
 
-**All-NA probe drop** (a genuine gotcha — `score_methylCIPHER.R:39-46`):
+**All-NA probe drop** (a genuine gotcha — `score_methylCIPHER.R:46-53`):
 ```r
 # methylCIPHER::check_DNAm REJECTS a probe that is NA in ALL samples (GrimAge/PC),
 # whereas partial-NA probes are imputed. Dropping converts an all-NA probe to a
@@ -333,7 +337,7 @@ if (n_all_na > 0) betas <- betas[, colSums(is.na(betas)) < nrow(betas), drop = F
 On GSE55763 this drops **4** CpGs (473,864 → 473,860).
 
 **The GrimAge Age/Female requirement** (the most documented gotcha —
-`score_methylCIPHER.R:59-62`, `80-81`):
+`score_methylCIPHER.R:66-69`, `87-88`):
 ```r
 ph <- data.frame(Sample_ID = as.character(pheno_in[[sid_col]]),
                  Age = as.numeric(pheno_in[[age_col]]),
@@ -346,7 +350,7 @@ GrimAge/PCGrimAge fold chronological **age** and **sex** into the prediction, so
 pheno frame must carry capitalized `Age` and `Female` (1=female, 0=male), aligned to
 the betas. Missing either column is a hard `stop()` (`:55-57`).
 
-**The score rows** (`score_methylCIPHER.R:97-111`) — every row carries its full
+**The score rows** (`score_methylCIPHER.R:104-118`) — every row carries its full
 provenance via `mk()`. Originals from `calcHorvath1/Hannum/PhenoAge/calcGrimAgeV1`;
 PC clocks from the single `calcPCClocks` call returning
 `PCHorvath1/PCHannum/PCPhenoAge/PCGrimAge`.
@@ -379,10 +383,10 @@ scores.csv  =  72 samples × 4 clocks × 2 variants  =  576 long-form rows
   against 0.2.0: `calcGrimAgeV1(DNAm, pheno)`, `calcPCClocks(DNAm, pheno, RData)`,
   capitalized `Age`/`Female`, row-aligned pheno, plus a PC-failure fallback that
   still emits the originals leaderboard (`status_report_0.3.1.md:81-84`; fallback at
-  `score_methylCIPHER.R:84-87,103-111`).
+  `score_methylCIPHER.R:91-94,112-117`).
 - **GrimAge V2 → V1 (resolved).** The scorer originally called `calcGrimAgeV2`; the
   locked `CLOCK_MANIFEST.csv` pairs original GrimAge as **V1** with PCGrimAge. Pinned
-  to V1 (`score_methylCIPHER.R:21,80`). (`PROVENANCE.template.md:12` still shows the
+  to V1 (`score_methylCIPHER.R:21,87`). (`PROVENANCE.template.md:12` still shows the
   old V2 placeholder — evidence the choice was genuinely open, not a live default.)
 - **`qs2`/`stringfish` DLL-load failure.** These packages (needed to read the PC
   reference `.qs2`) failed to load compiled DLLs; fixed by rebuilding from source
@@ -399,10 +403,10 @@ from a completely different engine (Python/pyaging) and running the *unchanged*
 reliage pipeline on it.
 
 **File:** `reliage/scoring/score_pyaging.py` — emits the **identical 12-column
-schema** as the R scorer (`score_pyaging.py:76-77`). Two subtleties, both real and
+schema** as the R scorer (`score_pyaging.py:85-86`). Two subtleties, both real and
 both in-code:
 
-- **Match by biological definition, not name** (`score_pyaging.py:23`):
+- **Match by biological definition, not name** (`score_pyaging.py:32`):
   ```python
   "dnamphenoage": ("PhenoAge", "original"),   # DNAm Levine (513 CpG), NOT clinical 'phenoage'
   ```
@@ -411,7 +415,7 @@ both in-code:
   `calcPhenoAge`. Choosing by name would silently compare two different biomarkers
   (Foundry Principle P3). *(Note: this is a pyaging clock-mapping subtlety, not a
   broader "clinical PhenoAge bug" — no such story exists elsewhere in the repo.)*
-- **GrimAge features live in the matrix, not obs** (`score_pyaging.py:37-42`):
+- **GrimAge features live in the matrix, not obs** (`score_pyaging.py:46-51`):
   pyaging's GrimAge reads Female/Age as the **last two feature columns** (`x[:,-2]`,
   `x[:,-1]`), so they must be appended as *columns of the beta matrix* before
   building the AnnData — the mirror image of the R Age/Female gotcha.
@@ -446,8 +450,8 @@ samples × 4 clocks × 2 variants. File: `generated/GSE55763/processed/scores.cs
 | `clock_function` | scorer | e.g. `calcGrimAgeV1`, `calcPCClocks:PCGrimAge` |
 | `imputation` | pin block | missing-CpG policy (must match across a pair) |
 
-The schema is defined once in R (`score_methylCIPHER.R:90-96`, the `mk()` helper) and
-mirrored exactly in Python (`score_pyaging.py:76-77`).
+The schema is defined once in R (`score_methylCIPHER.R:97-103`, the `mk()` helper) and
+mirrored exactly in Python (`score_pyaging.py:85-86`).
 
 **Who writes it:** a scorer (Stage 4 / 4'). **Who reads it:**
 `run_analysis.load_scores_wide` (Stage 6) and every downstream analysis
@@ -456,7 +460,7 @@ beta value — the table is the entire interface.
 
 **Long vs wide.** The canonical artifact is *long* (one fact per row, self-describing,
 unit- and provenance-tagged). `run_analysis` pivots it to wide in memory
-(`load_scores_wide`, `run_analysis.py:36-50`): if it sees `clock_id`+`score` columns
+(`load_scores_wide`, `run_analysis.py:37-51`): if it sees `clock_id`+`score` columns
 it pivots, prefixing PC variants with `PC` to make column labels like `PCHorvath1`. A
 convenience `scores_wide.csv` (72 × 8, with `subject/batch/age/gender`) is also
 written for humans.
@@ -493,10 +497,10 @@ python -m reliage.scoring.run_analysis \
 
 **Execution flow**
 ```
-run_analysis.main()                                     run_analysis.py:121-129
+run_analysis.main()                                     run_analysis.py:122-130
    ↓ run()
-   ↓ load_scores_wide(scores.csv)  → wide DF            :36-50
-   ↓ load_map(map.csv)  → {subject: [sample_ids]}       :53-59
+   ↓ load_scores_wide(scores.csv)  → wide DF            :37-51
+   ↓ load_map(map.csv)  → {subject: [sample_ids]}       :54-60
    ↓ 1. run_reliability_benchmark(...)  → leaderboard   :70   → benchmark.py
    ↓ 2. run_paired_contrasts(...)  → contrasts          :75   → contrast.py
    ↓ 3. recommend_for_effect(...)  → detectability      :84   → detectability.py
@@ -601,7 +605,7 @@ GSE55763: effect 1.0 yr → only PCGrimAge; 2.0 → all four PC clocks; 5.0 → 
   NaN guard.
 - **A clock silently missing from a contrast.** `run_analysis` only contrasts
   `usable_pairs` — pairs where *both* labels exist in the wide frame
-  (`run_analysis.py:74`). If PC scoring failed (Stage 4 fallback), the wide frame has
+  (`run_analysis.py:75`). If PC scoring failed (Stage 4 fallback), the wide frame has
   no `PC*` columns and `contrasts.csv` is empty → verdict `inconclusive`.
 - **Non-determinism.** The bootstrap is seeded (`seed=0`, `contrast.py:70`); a changed
   CI means changed inputs or a changed seed, not randomness.
@@ -619,7 +623,7 @@ chronological age.
 python -m reliage.scoring.age_accel_icc scores.csv map.csv pheno.csv
 ```
 
-**The OLS** (`age_accel_icc.py:24-28`) — a per-clock degree-1 `np.polyfit`, subtract the fit:
+**The OLS** (`age_accel_icc.py:25-29`) — a per-clock degree-1 `np.polyfit`, subtract the fit:
 ```python
 for c in wide.columns:
     y = wide[c].astype(float).values
@@ -648,18 +652,18 @@ python -m reliage.scoring.robustness scores.csv map.csv pheno.csv out/robustness
 
 **The four parts**
 
-1. **Compression / signal-preservation audit** (`robustness.py:32-67`). For every
+1. **Compression / signal-preservation audit** (`robustness.py:33-68`). For every
    clock: within-var (two-way MSE), between-subject var, age correlation, ranking
    preservation. Then per pair: `noise_ratio = PC/orig within` and
    `signal_preservation_ratio = PC/orig between`. This is the answer to "is PC just
    compressing the scale?" — **no**: noise falls 87–96% while between-subject signal
    is retained 74–85% (`CLAIMS.md:17`). → `compression_audit.csv`, `compression_summary.csv`
-2. **Leave-one-subject-out** (`robustness.py:69-88`). Recompute the variance ratio and
+2. **Leave-one-subject-out** (`robustness.py:70-89`). Recompute the variance ratio and
    ICC with each subject omitted; check no verdict flips. → `loso.csv`
-3. **Pair-level replicate differences** (`robustness.py:90-101`). Every subject's
+3. **Pair-level replicate differences** (`robustness.py:91-102`). Every subject's
    batch1/batch2/`absdiff` per clock — the raw material for the largest-discrepancy and
    batch-bias checks. → `pair_diffs.csv`
-4. **Bland–Altman** (`robustness.py:103-116`). Bias, limits of agreement, and a
+4. **Bland–Altman** (`robustness.py:104-117`). Bias, limits of agreement, and a
    proportional-bias test (`|diff|` vs mean). → `bland_altman.csv`
 
 **Debugging — Stage 8:** every part reuses `_var_within`, `compute_icc`,
@@ -679,7 +683,7 @@ it computes nothing new.
 python -m reliage.scoring.figures generated/GSE55763/out generated/GSE55763/out/figures
 ```
 
-**Which CSV → which figure** (`figures.py:20-24` reads; each block writes one PNG):
+**Which CSV → which figure** (`figures.py:20-25` reads; each block writes one PNG):
 
 | Figure | Reads | Shows |
 |---|---|---|
@@ -737,7 +741,7 @@ Both read the Versioned Score Table and the frozen `out/` artifacts — never be
 | **Bootstrap resamples subjects** | subjects are the independent unit; seeded for determinism | `contrast.py:70,92` |
 | **Coverage as a gate** | a pair is invalid if original/PC used different coverage/imputation | `PROVENANCE.md`, CLAUDE.md |
 | **Rebuild from GEO, not the RData fast path** | public-reproducibility is only earned on canonical files | `PROTOCOL.md` §5 |
-| **Match clocks by biological definition, not name** | pyaging `dnamphenoage` ≠ `phenoage`; GrimAge V1 ≠ V2 | `score_pyaging.py:23`, P3 |
+| **Match clocks by biological definition, not name** | pyaging `dnamphenoage` ≠ `phenoage`; GrimAge V1 ≠ V2 | `score_pyaging.py:32`, P3 |
 
 ---
 
@@ -809,7 +813,7 @@ pytest -q                       # full suite
 | Stage | File | Function / anchor | Line |
 |---|---|---|---|
 | 1 | `data/download_data.sh` | `get_gse55763()` | 27-37 |
-| 2 | `tools/GSE55763/parse_metadata.py` | pairing regex | 41 |
+| 2 | `tools/GSE55763/parse_metadata.py` | pairing regex | 72 |
 | 2 | ″ | pairing audit | 68-69 |
 | 3 | `tools/GSE55763/extract_betas.sh` | `zcat \| awk` extract | 17-29 |
 | 3 | ″ | 72-column assert | 23 |
@@ -820,20 +824,21 @@ pytest -q                       # full suite
 | 4 | ″ | `calcPCClocks` | 84-87 |
 | 4' | `reliage/scoring/score_pyaging.py` | clock mapping | 20-25 |
 | 4' | ″ | GrimAge features | 37-42 |
-| 6 | `reliage/scoring/run_analysis.py` | `run()` | 62-118 |
+| 6 | `reliage/scoring/run_analysis.py` | `run()` | 63-119 |
 | 6 | `reliage/benchmark.py` | `build_replicate_matrix` | 37-68 |
 | 6 | `reliage/benchmark.py` | `run_reliability_benchmark` | 142-209 |
 | 6 | `reliage/icc.py` | `compute_icc` | 175-240 |
 | 6 | `reliage/icc.py` | `smallest_detectable_change` (MDC95) | 116-127 |
 | 6 | `reliage/contrast.py` | `variance_ratio_contrast` | 63-124 |
 | 6 | `reliage/detectability.py` | `recommend_for_effect` | 88-112 |
-| 7 | `reliage/scoring/age_accel_icc.py` | OLS residual | 24-28 |
-| 8 | `reliage/scoring/robustness.py` | 4 parts | 32-116 |
-| 9 | `reliage/scoring/figures.py` | 5 figures | 26-105 |
+| 7 | `reliage/scoring/age_accel_icc.py` | OLS residual | 25-29 |
+| 8 | `reliage/scoring/robustness.py` | 4 parts | 33-117 |
+| 9 | `reliage/scoring/figures.py` | 5 figures | 27-106 |
 
 ---
 
-*This document reflects the frozen `v0.3.1-scientific-baseline` state. If a cited
-line moves, trust the function name and the surrounding comment over the number, and
-update this file. The scientific state of record is always
-[`CLAIMS.md`](PIR03-C2/CLAIMS.md), not any report.*
+*This document tracks the current `develop` state (post-`v0.3.1-scientific-baseline`:
+external data root, `tools/` generators, gitignored `generated/` build area, and input
+guards). Line citations drift when code changes — if a cited line has moved, trust the
+function name and the surrounding comment over the number, and update this file. The
+scientific state of record is always [`CLAIMS.md`](PIR03-C2/CLAIMS.md), not any report.*
