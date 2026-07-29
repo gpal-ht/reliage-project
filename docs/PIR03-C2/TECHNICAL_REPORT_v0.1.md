@@ -254,7 +254,7 @@ Full pipeline and commands: `docs/PIR03-C2/PIPELINE.md`. In brief, from the repo
 
 ```bash
 python tools/GSE55763/parse_metadata.py $LONGEVITY_DATA_ROOT/GSE55763/raw/GSE55763_series_matrix.txt.gz generated/GSE55763/metadata
-bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <betas.txt.gz>  generated/GSE55763/processed/betas.csv
+bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  $LONGEVITY_DATA_ROOT/GSE55763/raw/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
 Rscript reliage/scoring/score_methylCIPHER.R       generated/GSE55763/processed/betas.csv  generated/GSE55763/metadata/pheno.csv  generated/GSE55763/processed/scores.csv  <PCClocks_data.qs2>
 python -m reliage.scoring.run_analysis  generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv --out generated/GSE55763/out
 python -m reliage.scoring.age_accel_icc generated/GSE55763/processed/scores.csv generated/GSE55763/metadata/map.csv generated/GSE55763/metadata/pheno.csv

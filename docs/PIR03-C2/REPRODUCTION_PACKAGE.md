@@ -73,7 +73,8 @@ results in git history, under the pre-rename `datasets/GSE55763/` path).
 Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 
 > **The 9.7 GB gz is a build-time input, and its location is not hardcoded.** It is consumed *only*
-> by `extract_betas.sh` (§5.1), which takes its path as a command-line argument (the `<path>` below)
+> by `extract_betas.sh` (§5.1), which takes its path as a command-line argument (shown below as its
+> canonical `$LONGEVITY_DATA_ROOT/GSE55763/raw/` location, though you may pass any path)
 > — put it wherever you like; nothing in the code reads a fixed `Datasets/` path (it appears only in
 > `PROVENANCE.md` as a record of where the backup was kept). The gz — plus the series matrix and PC
 > reference — is required to regenerate the pipeline, because **nothing under `generated/` is
@@ -88,7 +89,7 @@ Keep the 9.7 GB gz **outside any cloud-synced folder** (see §7).
 ```bash
 python tools/GSE55763/parse_metadata.py  $LONGEVITY_DATA_ROOT/GSE55763/raw/GSE55763_series_matrix.txt.gz  generated/GSE55763/metadata
 #  EXPECT: "replicate samples: 72  groups: [1, 2]  individuals: 36 ... malformed: 0"
-bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  <path>/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
+bash   tools/GSE55763/extract_betas.sh   generated/GSE55763/metadata/replicate_sample_ids.txt  $LONGEVITY_DATA_ROOT/GSE55763/raw/GSE55763_normalized_betas.txt.gz  generated/GSE55763/processed/betas.csv
 #  EXPECT: "matched 72 beta columns" ; ~473,864 CpG rows, 73 columns
 ```
 Determinism: `parse_metadata.py` is deterministic, so re-running it yields identical
